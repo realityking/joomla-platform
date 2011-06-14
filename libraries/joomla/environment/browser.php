@@ -22,68 +22,67 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  Environment
  * @since       11.1
  */
-
 class JBrowser extends JObject
 {
 	/**
 	 * @var    integer  Major version number.
 	 * @since  11.1
 	 */
-	protected $_browserMajorVersion = 0;
+	private $_browserMajorVersion = 0;
 
 	/**
 	 * @var    integer  Minor version number
 	 * @since  11.1
 	 */
-	protected $_browserMinorVersion = 0;
+	private $_browserMinorVersion = 0;
 
 	/**
 	 *  @var    string  Browser name.
 	 *  @since  11.1
 	 */
-	protected $_browser = '';
+	private $_browser = '';
 
 	/**
 	 *  @var    string  Rendering engine.
 	 *  @since  11.1
 	 */
-	protected $_engine = '';
+	private $_engine = '';
 
 	/**
 	 * @var    string  Full user agent string.
 	 * @since  11.1
 	 */
-	protected $_agent = '';
+	private $_agent = '';
 
 	/**
 	 * @var    string  Lower-case user agent string.
 	 * @since  11.1
 	 */
-	protected $_lowerAgent = '';
+	private $_lowerAgent = '';
 
 	/**
 	 * @var    string  HTTP_ACCEPT string.
 	 * @since  11.1
 	 */
-	protected $_accept = '';
+	private $_accept = '';
 
 	/**
 	 * @var    array  Parsed HTTP_ACCEPT string
 	 * @since  11.1
 	 */
-	protected $_accept_parsed = array();
+	private $_accept_parsed = array();
 
 	/**
 	 * @var    string  Platform the browser is running on.
 	 * @since  11.1
 	 */
-	protected $_platform = '';
+	private $_platform = '';
 
 	/**
 	 * @var    array  Known robots.
 	 * @since  11.1
 	 */
-	protected $_robots = array(
+	private $_robots = array(
 		/* The most common ones. */
 		'Googlebot',
 		'msnbot',
@@ -136,13 +135,13 @@ class JBrowser extends JObject
 	/**
 	 * @var boolean Is this a mobile browser?
 	 */
-	protected $_mobile = false;
+	private $_mobile = false;
 
 	/**
 	 * @var    array  Features.
 	 * @since  11.1
 	 */
-	protected $_features = array(
+	private $_features = array(
 		'html'			=> true,
 		'wml'			=> false,
 		'xhtml+xml'		=> false,
@@ -156,7 +155,7 @@ class JBrowser extends JObject
 	 * @var   array  List of viewable image MIME subtypes.
 	 * @since  11.1
 	 */
-	protected $_images = array('jpeg', 'gif', 'png', 'pjpeg', 'x-png', 'bmp');
+	private $_images = array('jpeg', 'gif', 'png', 'pjpeg', 'x-png', 'bmp');
 
 
 	/**
@@ -219,7 +218,7 @@ class JBrowser extends JObject
 	 * @param   string  $userAgent  The browser string to parse.
 	 * @param   string  $accept     The HTTP_ACCEPT settings to use.
 	 *
-	 * @return
+	 * @return	void
 	 * @since   11.1
 	 */
 	public function match($userAgent = null, $accept = null)
@@ -245,7 +244,8 @@ class JBrowser extends JObject
 
 		// Parse the HTTP Accept Header
 		$accept_mime = explode(",", $this->_accept);
-		for ($i = 0, $count = count($accept_mime); $i < $count; $i++) {
+		for ($i = 0, $count = count($accept_mime); $i < $count; $i++)
+		{
 			$parts = explode(';q=', trim($accept_mime[$i]));
 			if (count($parts) === 1) {
 				$parts[1] = 1;
@@ -259,7 +259,8 @@ class JBrowser extends JObject
 		$this->_accept_parsed = $accept_mime;
 
 		// Check if browser accepts content type application/xhtml+xml. */* doesn't count ;)
-		foreach ($this->_accept_parsed as $mime) {
+		foreach ($this->_accept_parsed as $mime)
+		{
 			if ($mime[0] == 'application/xhtml+xml') {
 				$this->setFeature('xhtml+xml');
 			}
@@ -386,7 +387,7 @@ class JBrowser extends JObject
 	 * @param   string  $feature  The capability to set.
 	 * @param   string  $value Special capability parameter.
 	 *
-	 * @return
+	 * @return	void
 	 * @since   11.1
 	 */
 	public function setFeature($feature, $value = true)
@@ -494,7 +495,8 @@ class JBrowser extends JObject
 	 */
 	public function isRobot()
 	{
-		foreach ($this->_robots as $robot) {
+		foreach ($this->_robots as $robot)
+		{
 			if (strpos($this->_agent, $robot) !== false) {
 				return true;
 			}
