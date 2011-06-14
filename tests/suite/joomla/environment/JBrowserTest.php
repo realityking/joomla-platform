@@ -54,69 +54,53 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
-	/**
-	 * @todo Implement testGetPlatform().
-	 */
 	public function testGetPlatform()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->getPlatform(),
+			$this->equalTo('mac')
 		);
 	}
 
-	/**
-	 * @todo Implement testSetBrowser().
-	 */
-	public function testSetBrowser()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @todo Implement testGetBrowser().
-	 */
 	public function testGetBrowser()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->getBrowser(),
+			$this->equalTo('safari')
 		);
 	}
 
-	/**
-	 * @todo Implement testGetMajor().
-	 */
 	public function testGetMajor()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->getMajor(),
+			$this->equalTo(5)
 		);
 	}
 
-	/**
-	 * @todo Implement testGetMinor().
-	 */
 	public function testGetMinor()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->getMinor(),
+			$this->equalTo(0)
 		);
 	}
 
-	/**
-	 * @todo Implement testGetVersion().
-	 */
 	public function testGetVersion()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->getVersion(),
+			$this->equalTo('5.0')
 		);
 	}
 
@@ -175,9 +159,6 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
-	/**
-	 * @todo Implement testIsViewable().
-	 */
 	public function testIsViewable()
 	{
 		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
@@ -188,36 +169,41 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
-	/**
-	 * @todo Implement testIsBrowser().
-	 */
 	public function testIsBrowser()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->isBrowser('safari'),
+			$this->equalTo(TRUE)
+		);
+		$this->assertThat(
+			$this->object->isBrowser('SaFaRi'),
+			$this->equalTo(TRUE)
+		);
+		$this->assertThat(
+			$this->object->isBrowser('firefox'),
+			$this->equalTo(FALSE)
 		);
 	}
 
-	/**
-	 * @todo Implement testIsRobot().
-	 */
 	public function testIsRobot()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->isRobot(),
+			$this->equalTo(FALSE)
 		);
 	}
 
-	/**
-	 * @todo Implement testIsMobile().
-	 */
 	public function testIsMobile()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->isMobile(),
+			$this->equalTo(FALSE)
 		);
 	}
 

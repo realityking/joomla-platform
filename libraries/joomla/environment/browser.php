@@ -478,12 +478,12 @@ class JBrowser extends JObject
 	 *
 	 * @param   string  $browser  The browser to check.
 	 *
-	 * @return  boolean  Is the given browser the same as the current?
+	 * @return  boolean  True if the given browser the same as the current.
 	 * @since   11.1
 	 */
 	public function isBrowser($browser)
 	{
-		return ($this->_browser === $browser);
+		return ($this->_browser === strtolower($browser));
 	}
 
 	/**
