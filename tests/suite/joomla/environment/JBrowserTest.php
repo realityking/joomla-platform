@@ -104,14 +104,13 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
-	/**
-	 * @todo Implement testGetAgentString().
-	 */
 	public function testGetAgentString()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->getAgentString(),
+			$this->equalTo('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27')
 		);
 	}
 
@@ -231,6 +230,10 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
     {
         $this->object->match($agent, $accept);
 
+		$this->assertThat(
+			$this->object->getAgentString(),
+			$this->equalTo(trim($agent))
+		);
 		$this->assertThat(
 			$this->object->getPlatform(),
 			$this->equalTo($platform)
