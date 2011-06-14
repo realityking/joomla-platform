@@ -25,13 +25,13 @@ defined('JPATH_PLATFORM') or die;
 class JBrowser extends JObject
 {
 	/**
-	 * @var    integer  Major version number.
+	 * @var    integer  Browser major version number.
 	 * @since  11.1
 	 */
 	private $_browserMajorVersion = 0;
 
 	/**
-	 * @var    integer  Minor version number
+	 * @var    integer  Browser mersion number
 	 * @since  11.1
 	 */
 	private $_browserMinorVersion = 0;
@@ -41,6 +41,18 @@ class JBrowser extends JObject
 	 *  @since  11.1
 	 */
 	private $_browser = '';
+
+	/**
+	 * @var    integer  Engine major version number.
+	 * @since  11.1
+	 */
+	private $_enginerMajorVersion = 0;
+
+	/**
+	 * @var    integer  Engine minor version number
+	 * @since  11.1
+	 */
+	private $_engineMinorVersion = 0;
 
 	/**
 	 *  @var    string  Rendering engine.
@@ -455,12 +467,12 @@ class JBrowser extends JObject
 				}
 			}
 
-				// Deal with Mozilla pjpeg/jpeg issue
-				if ($this->isBrowser('mozilla') &&
-				($mimetype == 'image/pjpeg') &&
-				(strpos($this->_accept, 'image/jpeg') !== false)) {
+			// Deal with Mozilla pjpeg/jpeg issue
+			if ($this->isBrowser('mozilla')
+				&& ($mimetype == 'image/pjpeg')
+				&& (strpos($this->_accept, 'image/jpeg') !== false)) {
 					return true;
-				}
+			}
 
 			if (!$wildcard_match) {
 				return false;
