@@ -29,19 +29,25 @@ class JBrowser extends JObject
 	 * @var    integer  Major version number.
 	 * @since  11.1
 	 */
-	protected $_majorVersion = 0;
+	protected $_browserMajorVersion = 0;
 
 	/**
 	 * @var    integer  Minor version number
 	 * @since  11.1
 	 */
-	protected $_minorVersion = 0;
+	protected $_browserMinorVersion = 0;
 
 	/**
 	 *  @var    string  Browser name.
 	 *  @since  11.1
 	 */
 	protected $_browser = '';
+
+	/**
+	 *  @var    string  Rendering engine.
+	 *  @since  11.1
+	 */
+	protected $_engine = '';
 
 	/**
 	 * @var    string  Full user agent string.
@@ -139,44 +145,9 @@ class JBrowser extends JObject
 	protected $_features = array(
 		'html'			=> true,
 		'wml'			=> false,
-		'images'		=> true,
-		'iframes'		=> false,
-		'frames'		=> true,
-		'tables'		=> true,
-		'java'			=> true,
-		'javascript'	=> true,
-		'dom'			=> false,
-		'utf'			=> false,
-		'rte'			=> false,
-		'homepage'		=> false,
-		'accesskey'		=> false,
-		'xmlhttpreq'	=> false,
 		'xhtml+xml'		=> false,
 		'mathml'		=> false,
 		'svg'			=> false
-	);
-
-	/**
-	 * @var    array  Quirks.
-	 * @since  11.1
-	 */
-	protected $_quirks = array(
-		'avoid_popup_windows'			=> false,
-		'break_disposition_header'		=> false,
-		'break_disposition_filename'	=> false,
-		'broken_multipart_form'			=> false,
-		'cache_same_url'				=> false,
-		'cache_ssl_downloads'			=> false,
-		'double_linebreak_textarea'		=> false,
-		'empty_file_input_value'		=> false,
-		'must_cache_forms'				=> false,
-		'no_filename_spaces'			=> false,
-		'no_hidden_overflow_tables'		=> false,
-		'ow_gui_1.3'					=> false,
-		'png_transparency'				=> false,
-		'scrollbar_in_way'				=> false,
-		'scroll_tds'					=> false,
-		'windowed_controls'				=> false,
 	);
 
 	/**
@@ -289,7 +260,7 @@ class JBrowser extends JObject
 
 		// Check if browser accepts content type application/xhtml+xml. */* doesn't count ;)
 		foreach ($this->_accept_parsed as $mime) {
-			if (($mime[0] == 'application/xhtml+xml')) {
+			if ($mime[0] == 'application/xhtml+xml') {
 				$this->setFeature('xhtml+xml');
 			}
 		}
@@ -299,6 +270,11 @@ class JBrowser extends JObject
 			$this->setFeature('mathml');
 		}
 
+		// Check whehter the UA claims to be a mobile device.
+		if (strpos($this->_lowerAgent, 'mobile') !== false) {
+			$this->_mobile = true;
+		}
+
 		// Check for UTF support.
 		if (isset($_SERVER['HTTP_ACCEPT_CHARSET'])) {
 			$this->setFeature('utf', strpos(strtolower($_SERVER['HTTP_ACCEPT_CHARSET']), 'utf') !== false);
@@ -306,345 +282,8 @@ class JBrowser extends JObject
 
 		if (!empty($this->_agent)) {
 			$this->_setPlatform();
-
-			if (strpos($this->_lowerAgent, 'mobileexplorer') !== false ||
-				strpos($this->_lowerAgent, 'openwave') !== false ||
-				strpos($this->_lowerAgent, 'opera mini') !== false ||
-				strpos($this->_lowerAgent, 'opera mobi') !== false ||
-				strpos($this->_lowerAgent, 'operamini') !== false) {
-				$this->setFeature('frames', false);
-				$this->setFeature('javascript', false);
-				$this->setQuirk('avoid_popup_windows');
-				$this->_mobile = true;
-			} elseif (preg_match('|Opera[/ ]([0-9.]+)|', $this->_agent, $version)) {
-				$this->setBrowser('opera');
-				list($this->_majorVersion, $this->_minorVersion) = explode('.', $version[1]);
-				$this->setFeature('javascript', true);
-				$this->setQuirk('no_filename_spaces');
-
-				if ($this->_majorVersion >= 7) {
-					$this->setFeature('dom');
-					$this->setFeature('iframes');
-					$this->setFeature('accesskey');
-					$this->setQuirk('double_linebreak_textarea');
-				}
-				/* Due to changes in Opera UA, we need to check Version/xx.yy,
-				 * but only if version is > 9.80. See: http://dev.opera.com/articles/view/opera-ua-string-changes/ */
-				if ($this->_majorVersion == 9 && $this->_minorVersion >= 80) {
-					preg_match('|Version[/ ]([0-9.]+)|', $this->_agent, $version);
-					list($this->_majorVersion, $this->_minorVersion) = explode('.', $version[1]);
-				}
-			} elseif (preg_match('|Chrome[/ ]([0-9.]+)|', $this->_agent, $version)) {
-				$this->setBrowser('chrome');
-				list($this->_majorVersion, $this->_minorVersion) = explode('.', $version[1]);
-				$this->setFeature('javascript', true);
-			} elseif (strpos($this->_lowerAgent, 'elaine/') !== false ||
-						strpos($this->_lowerAgent, 'palmsource') !== false ||
-						strpos($this->_lowerAgent, 'digital paths') !== false) {
-				$this->setBrowser('palm');
-				$this->setFeature('images', false);
-				$this->setFeature('frames', false);
-				$this->setFeature('javascript', false);
-				$this->setQuirk('avoid_popup_windows');
-				$this->_mobile = true;
-			} elseif ((preg_match('|MSIE ([0-9.]+)|', $this->_agent, $version)) ||
-						(preg_match('|Internet Explorer/([0-9.]+)|', $this->_agent, $version))) {
-
-				$this->setBrowser('msie');
-				$this->setQuirk('cache_ssl_downloads');
-				$this->setQuirk('cache_same_url');
-				$this->setQuirk('break_disposition_filename');
-
-				if (strpos($version[1], '.') !== false) {
-					list($this->_majorVersion, $this->_minorVersion) = explode('.', $version[1]);
-				} else {
-					$this->_majorVersion = $version[1];
-					$this->_minorVersion = 0;
-				}
-
-				/* IE (< 7) on Windows does not support alpha transparency in
-				 * PNG images. */
-				if (($this->_majorVersion < 7) &&
-					preg_match('/windows/i', $this->_agent)) {
-					$this->setQuirk('png_transparency');
-				}
-
-				/* Some Handhelds have their screen resolution in the
-				 * user agent string, which we can use to look for
-				 * mobile agents.
-				 */
-				if (preg_match('/; (120x160|240x280|240x320|320x320)\)/', $this->_agent)) {
-					$this->_mobile = true;
-				}
-
-				switch ($this->_majorVersion) {
-				case 7:
-					$this->setFeature('javascript', 1.4);
-					$this->setFeature('dom');
-					$this->setFeature('iframes');
-					$this->setFeature('utf');
-					$this->setFeature('rte');
-					$this->setFeature('homepage');
-					$this->setFeature('accesskey');
-					$this->setFeature('xmlhttpreq');
-					$this->setQuirk('scrollbar_in_way');
-					break;
-
-				case 6:
-					$this->setFeature('javascript', 1.4);
-					$this->setFeature('dom');
-					$this->setFeature('iframes');
-					$this->setFeature('utf');
-					$this->setFeature('rte');
-					$this->setFeature('homepage');
-					$this->setFeature('accesskey');
-					$this->setFeature('xmlhttpreq');
-					$this->setQuirk('scrollbar_in_way');
-					$this->setQuirk('broken_multipart_form');
-					$this->setQuirk('windowed_controls');
-					break;
-
-				case 5:
-					if ($this->getPlatform() == 'mac') {
-						$this->setFeature('javascript', 1.2);
-					} else {
-						// MSIE 5 for Windows.
-						$this->setFeature('javascript', 1.4);
-						$this->setFeature('dom');
-						$this->setFeature('xmlhttpreq');
-						if ($this->_minorVersion >= 5) {
-							$this->setFeature('rte');
-							$this->setQuirk('windowed_controls');
-						}
-					}
-					$this->setFeature('iframes');
-					$this->setFeature('utf');
-					$this->setFeature('homepage');
-					$this->setFeature('accesskey');
-					if ($this->_minorVersion == 5) {
-						$this->setQuirk('break_disposition_header');
-						$this->setQuirk('broken_multipart_form');
-					}
-					break;
-
-				case 4:
-					$this->setFeature('javascript', 1.2);
-					$this->setFeature('accesskey');
-					if ($this->_minorVersion > 0) {
-						$this->setFeature('utf');
-					}
-					break;
-
-				case 3:
-					$this->setFeature('javascript', 1.5);
-					$this->setQuirk('avoid_popup_windows');
-					break;
-				}
-			} elseif (preg_match('|amaya/([0-9.]+)|', $this->_agent, $version)) {
-				$this->setBrowser('amaya');
-				$this->_majorVersion = $version[1];
-				if (isset($version[2])) {
-					$this->_minorVersion = $version[2];
-				}
-				if ($this->_majorVersion > 1) {
-					$this->setFeature('mathml');
-					$this->setFeature('svg');
-				}
-				$this->setFeature('xhtml+xml');
-			} elseif (preg_match('|W3C_Validator/([0-9.]+)|', $this->_agent, $version)) {
-				$this->setFeature('mathml');
-				$this->setFeature('svg');
-				$this->setFeature('xhtml+xml');
-			} elseif (preg_match('|ANTFresco/([0-9]+)|', $this->_agent, $version)) {
-				$this->setBrowser('fresco');
-				$this->setFeature('javascript', 1.5);
-				$this->setQuirk('avoid_popup_windows');
-			} elseif (strpos($this->_lowerAgent, 'avantgo') !== false) {
-				$this->setBrowser('avantgo');
-				$this->_mobile = true;
-			} elseif (preg_match('|Konqueror/([0-9]+)|', $this->_agent, $version) ||
-						preg_match('|Safari/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
-				// Konqueror and Apple's Safari both use the KHTML
-				// rendering engine.
-				$this->setBrowser('konqueror');
-				$this->setQuirk('empty_file_input_value');
-				$this->setQuirk('no_hidden_overflow_tables');
-				$this->_majorVersion = $version[1];
-				if (isset($version[2])) {
-					$this->_minorVersion = $version[2];
-				}
-
-				if (strpos($this->_agent, 'Safari') !== false &&
-					$this->_majorVersion >= 60) {
-					// Safari.
-					$this->setBrowser('safari');
-					$this->setFeature('utf');
-					$this->setFeature('javascript', 1.4);
-					$this->setFeature('dom');
-					$this->setFeature('iframes');
-					if ($this->_majorVersion > 125 ||
-						($this->_majorVersion == 125 &&
-						$this->_minorVersion >= 1)) {
-						$this->setFeature('accesskey');
-						$this->setFeature('xmlhttpreq');
-					}
-					if ($this->_majorVersion > 522) {
-						$this->setFeature('svg');
-						$this->setFeature('xhtml+xml');
-					}
-					// Set browser version, not engine version
-					preg_match('|Version[/ ]([0-9.]+)|', $this->_agent, $version);
-					list($this->_majorVersion, $this->_minorVersion) = explode('.', $version[1]);
-				} else {
-					// Konqueror.
-					$this->setFeature('javascript', 1.5);
-					switch ($this->_majorVersion) {
-					case 3:
-						$this->setFeature('dom');
-						$this->setFeature('iframes');
-						$this->setFeature('xhtml+xml');
-						break;
-					}
-				}
-			} elseif (preg_match('|Mozilla/([0-9.]+)|', $this->_agent, $version)) {
-				$this->setBrowser('mozilla');
-				$this->setQuirk('must_cache_forms');
-
-				list($this->_majorVersion, $this->_minorVersion) = explode('.', $version[1]);
-				switch ($this->_majorVersion) {
-				case 5:
-					if ($this->getPlatform() == 'win') {
-						$this->setQuirk('break_disposition_filename');
-					}
-					$this->setFeature('javascript', 1.4);
-					$this->setFeature('dom');
-					$this->setFeature('accesskey');
-					$this->setFeature('xmlhttpreq');
-					if (preg_match('|rv:(.*)\)|', $this->_agent, $revision)) {
-						if ($revision[1] >= 1) {
-							$this->setFeature('iframes');
-						}
-						if ($revision[1] >= 1.3) {
-							$this->setFeature('rte');
-						}
-						if ($revision[1] >= 1.5) {
-							$this->setFeature('svg');
-							$this->setFeature('mathml');
-							$this->setFeature('xhtml+xml');
-						}
-					}
-					break;
-
-				case 4:
-					$this->setFeature('javascript', 1.3);
-					$this->setQuirk('buggy_compression');
-					break;
-
-				case 3:
-				default:
-					$this->setFeature('javascript', 1);
-					$this->setQuirk('buggy_compression');
-					break;
-				}
-			} elseif (preg_match('|Lynx/([0-9]+)|', $this->_agent, $version)) {
-				$this->setBrowser('lynx');
-				$this->setFeature('images', false);
-				$this->setFeature('frames', false);
-				$this->setFeature('javascript', false);
-				$this->setQuirk('avoid_popup_windows');
-			} elseif (preg_match('|Links \(([0-9]+)|', $this->_agent, $version)) {
-				$this->setBrowser('links');
-				$this->setFeature('images', false);
-				$this->setFeature('frames', false);
-				$this->setFeature('javascript', false);
-				$this->setQuirk('avoid_popup_windows');
-			} elseif (preg_match('|HotJava/([0-9]+)|', $this->_agent, $version)) {
-				$this->setBrowser('hotjava');
-				$this->setFeature('javascript', false);
-			} elseif (strpos($this->_agent, 'UP/') !== false ||
-						strpos($this->_agent, 'UP.B') !== false ||
-						strpos($this->_agent, 'UP.L') !== false) {
-				$this->setBrowser('up');
-				$this->setFeature('html', false);
-				$this->setFeature('javascript', false);
-				$this->setFeature('wml');
-
-				if (strpos($this->_agent, 'GUI') !== false &&
-					strpos($this->_agent, 'UP.Link') !== false) {
-					/* The device accepts Openwave GUI extensions for
-					 * WML 1.3. Non-UP.Link gateways sometimes have
-					 * problems, so exclude them. */
-					$this->setQuirk('ow_gui_1.3');
-				}
-				$this->_mobile = true;
-			} elseif (strpos($this->_agent, 'Xiino/') !== false) {
-				$this->setBrowser('xiino');
-				$this->setFeature('wml');
-				$this->_mobile = true;
-			} elseif (strpos($this->_agent, 'Palmscape/') !== false) {
-				$this->setBrowser('palmscape');
-				$this->setFeature('javascript', false);
-				$this->setFeature('wml');
-				$this->_mobile = true;
-			} elseif (strpos($this->_agent, 'Nokia') !== false) {
-				$this->setBrowser('nokia');
-				$this->setFeature('html', false);
-				$this->setFeature('wml');
-				$this->setFeature('xhtml');
-				$this->_mobile = true;
-			} elseif (strpos($this->_agent, 'Ericsson') !== false) {
-				$this->setBrowser('ericsson');
-				$this->setFeature('html', false);
-				$this->setFeature('wml');
-				$this->_mobile = true;
-			} elseif (strpos($this->_lowerAgent, 'wap') !== false) {
-				$this->setBrowser('wap');
-				$this->setFeature('html', false);
-				$this->setFeature('javascript', false);
-				$this->setFeature('wml');
-				$this->_mobile = true;
-			} elseif (strpos($this->_lowerAgent, 'docomo') !== false ||
-						strpos($this->_lowerAgent, 'portalmmm') !== false) {
-				$this->setBrowser('imode');
-				$this->setFeature('images', false);
-				$this->_mobile = true;
-		} elseif (strpos($this->_agent, 'BlackBerry') !== false) {
-				$this->setBrowser('blackberry');
-				$this->setFeature('html', false);
-				$this->setFeature('javascript', false);
-				$this->setFeature('wml');
-				$this->_mobile = true;
-			} elseif (strpos($this->_agent, 'MOT-') !== false) {
-				$this->setBrowser('motorola');
-				$this->setFeature('html', false);
-				$this->setFeature('javascript', false);
-				$this->setFeature('wml');
-				$this->_mobile = true;
-			} elseif (strpos($this->_lowerAgent, 'j-') !== false) {
-				$this->setBrowser('mml');
-				$this->_mobile = true;
-			}
-		}
-	}
-
-	/**
-	 * Match the platform of the browser.
-	 *
-	 * This is a pretty simplistic implementation, but it's intended
-	 * to let us tell what line breaks to send, so it's good enough
-	 * for its purpose.
-	 *
-	 * @return
-	 * @since   11.1
-	 */
-	protected function _setPlatform()
-	{
-		if (strpos($this->_lowerAgent, 'wind') !== false) {
-			$this->_platform = 'win';
-		} elseif (strpos($this->_lowerAgent, 'mac') !== false) {
-			$this->_platform = 'mac';
-		} else {
-			$this->_platform = 'unix';
+			$this->_setEngine();
+			$this->_setBrowser();
 		}
 	}
 
@@ -660,19 +299,6 @@ class JBrowser extends JObject
 	}
 
 	/**
-	 * Sets the current browser.
-	 *
-	 * @param   string  $browser  The browser to set as current.
-	 *
-	 * @return
-	 * @since   11.1
-	 */
-	public function setBrowser($browser)
-	{
-		$this->_browser = $browser;
-	}
-
-	/**
 	 * Retrieve the current browser.
 	 *
 	 * @return  string  The current browser.
@@ -684,6 +310,17 @@ class JBrowser extends JObject
 	}
 
 	/**
+	 * Retrieve the current browser's engine.
+	 *
+	 * @return  string  The current engine.
+	 * @since   11.1
+	 */
+	public function getEngine()
+	{
+		return $this->_engine;
+	}
+
+	/**
 	 * Retrieve the current browser's major version.
 	 *
 	 * @return  integer  The current browser's major version
@@ -691,7 +328,7 @@ class JBrowser extends JObject
 	 */
 	public function getMajor()
 	{
-		return $this->_majorVersion;
+		return $this->_browserMajorVersion;
 	}
 
 	/**
@@ -702,7 +339,7 @@ class JBrowser extends JObject
 	 */
 	public function getMinor()
 	{
-		return $this->_minorVersion;
+		return $this->_browserMinorVersion;
 	}
 
 	/**
@@ -713,7 +350,7 @@ class JBrowser extends JObject
 	 */
 	public function getVersion()
 	{
-		return $this->_majorVersion . '.' . $this->_minorVersion;
+		return $this->_browserMajorVersion . '.' . $this->_browserMinorVersion;
 	}
 
 	/**
@@ -741,48 +378,6 @@ class JBrowser extends JObject
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Set unique behavior for the current browser.
-	 *
-	 * @param   string  $quirk  The behavior to set.
-	 * @param   string  $value  Special behavior parameter.
-	 *
-	 * @return
-	 * @since   11.1
-	 */
-	public function setQuirk($quirk, $value = true)
-	{
-		$this->_quirks[$quirk] = $value;
-	}
-
-	/**
-	 * Check unique behavior for the current browser.
-	 *
-	 * @param   string  $quirk  The behavior to check.
-	 *
-	 * @return  boolean  Does the browser have the behavior set?
-	 * @since   11.1
-	 */
-	public function hasQuirk($quirk)
-	{
-		return !empty($this->_quirks[$quirk]);
-	}
-
-	/**
-	 * Retrieve unique behavior for the current browser.
-	 *
-	 * @param   string  $quirk  The behavior to retrieve.
-	 *
-	 * @return  string  The value for the requested behavior.
-	 * @since   11.1
-	 */
-	public function getQuirk($quirk)
-	{
-		return isset($this->_quirks[$quirk])
-				? $this->_quirks[$quirk]
-				: null;
 	}
 
 	/**
@@ -929,5 +524,115 @@ class JBrowser extends JObject
 		return ((isset($_SERVER['HTTPS']) &&
 			($_SERVER['HTTPS'] == 'on')) ||
 			getenv('SSL_PROTOCOL_VERSION'));
+	}
+
+	/**
+	 * Parse the user agent string to determine the browser.
+	 *
+	 * @return  void
+	 * @since   11.1
+	 */
+	private function _setBrowser()
+	{
+		if (preg_match('|MSIE ([0-9.]+)|', $this->_agent, $version)) {
+			$this->_browser = 'msie';
+			if (strpos($version[1], '.') !== false) {
+				list($this->_browserMajorVersion, $this->_browserMinorVersion) = explode('.', $version[1]);
+			} else {
+				$this->_browserMajorVersion = $version[1];
+				$this->_browserMinorVersion = 0;
+			}
+		} else if ((preg_match('|Netscape/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version))
+				|| (preg_match('|Navigator/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version))) {
+			$this->_browser = 'netscape';
+			$this->_browserMajorVersion = $version[1];
+			if (isset($version[2])) {
+				$this->_browserMinorVersion = $version[2];
+			}
+		} else if (preg_match('|Firefox/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_browser = 'firefox';
+			$this->_browserMajorVersion = $version[1];
+			if (isset($version[2])) {
+				$this->_browserMinorVersion = $version[2];
+			}
+		} else if (preg_match('|Chrome/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_browser = 'chrome';
+			$this->_browserMajorVersion = $version[1];
+			if (isset($version[2])) {
+				$this->_browserMinorVersion = $version[2];
+			}
+		} else if (strpos($this->_lowerAgent, 'android') !== false) {
+			$this->_browser = 'android';
+			preg_match('|Version/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version);
+			$this->_browserMajorVersion = $version[1];
+			if (isset($version[2])) {
+				$this->_browserMinorVersion = $version[2];
+			}
+		} else if (strpos($this->_lowerAgent, 'safari') !== false) {
+			$this->_browser = 'safari';
+			if (preg_match('|Version/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+				$this->_browserMajorVersion = $version[1];
+				if (isset($version[2])) {
+					$this->_browserMinorVersion = $version[2];
+				}
+			}
+		} else if (strpos($this->_lowerAgent, 'opera') !== false) {
+			$this->_browser = 'opera';
+			// first condition is for versions >= 10, they've changed the UA string at that time
+			if (preg_match('|Version/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version) || (preg_match('|Opera/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version))) {
+				$this->_browserMajorVersion = $version[1];
+				if (isset($version[2])) {
+					$this->_browserMinorVersion = $version[2];
+				}
+			}
+		} else if (preg_match('|Konqueror/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_browser = 'konqueror';
+			$this->_browserMajorVersion = $version[1];
+			if (isset($version[2])) {
+				$this->_browserMinorVersion = $version[2];
+			}
+		}
+	}
+
+	/**
+	 * Match the platform of the browser.
+	 *
+	 * This is a pretty simplistic implementation, but it's intended
+	 * to let us tell what line breaks to send, so it's good enough
+	 * for its purpose.
+	 *
+	 * @return	void
+	 * @since   11.1
+	 */
+	private function _setPlatform()
+	{
+		if (strpos($this->_lowerAgent, 'wind') !== false) {
+			$this->_platform = 'win';
+		} elseif (strpos($this->_lowerAgent, 'mac') !== false) {
+			$this->_platform = 'mac';
+		} else {
+			$this->_platform = 'unix';
+		}
+	}
+
+	/**
+	 * Match the engine of the browser.
+	 *
+	 * @return	void
+	 * @since   11.1
+	 */
+	private function _setEngine()
+	{
+		if (preg_match('|Gecko/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_engine = 'gecko';
+		} else if (preg_match('|Trident/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_engine = 'trident';
+		} else if (preg_match('|AppleWebKit/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_engine = 'webkit';
+		} else if (preg_match('|Presto/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_engine = 'presto';
+		} else if (preg_match('|KHTML/([0-9]+)\.?([0-9]+)?|', $this->_agent, $version)) {
+			$this->_engine = 'khtml';
+		}
 	}
 }
