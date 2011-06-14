@@ -180,9 +180,11 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testIsViewable()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+		$this->object->match('Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+				'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5');
+		$this->assertThat(
+			$this->object->isViewable('application/xhtml+xml'),
+			$this->equalTo(TRUE)
 		);
 	}
 
@@ -250,6 +252,14 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
 		$this->assertThat(
 			$this->object->getBrowser(),
 			$this->equalTo($browser)
+		);
+		$this->assertThat(
+			$this->object->isBrowser($browser),
+			$this->equalTo(TRUE)
+		);
+		$this->assertThat(
+			$this->object->isBrowser('NOT-A-BROWSER'),
+			$this->equalTo(FALSE)
 		);
 		$this->assertThat(
 			$this->object->getMajor(),
