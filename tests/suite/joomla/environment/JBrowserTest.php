@@ -143,39 +143,6 @@ class JBrowserTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testSetQuirk().
-	 */
-	public function testSetQuirk()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @todo Implement testHasQuirk().
-	 */
-	public function testHasQuirk()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
-	}
-
-	/**
-	 * @todo Implement testGetQuirk().
-	 */
-	public function testGetQuirk()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
-		);
-	}
-
-	/**
 	 * @todo Implement testSetFeature().
 	 */
 	public function testSetFeature()
