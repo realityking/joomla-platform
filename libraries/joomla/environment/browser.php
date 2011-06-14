@@ -370,7 +370,7 @@ class JBrowser extends JObject
 	 * @return  string  The HTTP server protocol version.
 	 * @since   11.1
 	 */
-	public function getHTTPProtocol()
+	public static function getHTTPProtocol()
 	{
 		if (isset($_SERVER['SERVER_PROTOCOL'])) {
 			if (($pos = strrpos($_SERVER['SERVER_PROTOCOL'], '/'))) {
