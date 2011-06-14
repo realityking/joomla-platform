@@ -519,7 +519,7 @@ class JBrowser extends JObject
 	 * @return  boolean  True if using SSL, false if not.
 	 * @since   11.1
 	 */
-	public function isSSLConnection()
+	public static function isSSLConnection()
 	{
 		return ((isset($_SERVER['HTTPS']) &&
 			($_SERVER['HTTPS'] == 'on')) ||
