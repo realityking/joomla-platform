@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+defined('JPATH_PLATFORM') or die();
 
 jimport('joomla.application.input');
 
@@ -32,9 +32,12 @@ class JInputCookie extends JInput
 	 */
 	public function __construct($source = null, $options = array())
 	{
-		if (isset ($options['filter'])) {
+		if (isset($options['filter']))
+		{
 			$this->filter = $options['filter'];
-		} else {
+		}
+		else
+		{
 			$this->filter = JFilterInput::getInstance();
 		}
 
@@ -50,7 +53,7 @@ class JInputCookie extends JInput
 	 *
 	 * @param   string   $name      Name of the value to set.
 	 * @param   mixed    $value     Value to assign to the input.
-	 * @param   int      $expire    The time the cookie expires. This is a Unix timestamp so is in number
+	 * @param   integer  $expire    The time the cookie expires. This is a Unix timestamp so is in number
 	 *                              of seconds since the epoch. In other words, you'll most likely set this
 	 *                              with the time() function plus the number of seconds before you want it
 	 *                              to expire. Or you might use mktime(). time()+60*60*24*30 will set the
@@ -79,8 +82,8 @@ class JInputCookie extends JInput
 	 *
 	 * @return  void
 	 *
-	 * @see     setcookie()
 	 * @link    http://www.ietf.org/rfc/rfc2109.txt
+	 * @see     setcookie()
 	 * @since   11.1
 	 */
 	public function set($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httpOnly = false)

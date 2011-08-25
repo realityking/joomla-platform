@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+defined('JPATH_PLATFORM') or die();
 
 /**
  * Tree Node Class.
@@ -18,7 +18,6 @@ defined('JPATH_PLATFORM') or die;
  */
 class JNode extends JObject
 {
-
 	/**
 	 * Parent node
 	 * @var    object
@@ -69,9 +68,9 @@ class JNode extends JObject
 	 *
 	 * If the node already has a parent, the link is unset
 	 *
-	 * @param    mixed  The JNode for parent to be set or null
+	 * @param   mixed  object  The JNode for parent to be set or null
 	 *
-	 * @return   void
+	 * @return  void
 	 *
 	 * @since    11.1
 	 */
@@ -125,7 +124,7 @@ class JNode extends JObject
 	 */
 	function hasChildren()
 	{
-		return (bool)count($this->_children);
+		return (bool) count($this->_children);
 	}
 
 	/**

@@ -67,7 +67,7 @@ class JBrowser extends JObject
 	private $_agent = '';
 
 	/**
-	 * @var    string  Lower-case user agent string.
+	 * @var    string  Lower-case user agent string
 	 * @since  11.1
 	 */
 	private $_lowerAgent = '';
@@ -85,7 +85,7 @@ class JBrowser extends JObject
 	private $_accept_parsed = array();
 
 	/**
-	 * @var    string  Platform the browser is running on.
+	 * @var    string  Platform the browser is running on
 	 * @since  11.1
 	 */
 	private $_platform = '';
@@ -210,15 +210,28 @@ class JBrowser extends JObject
 		return $instances[$signature];
 	}
 
+	/**
+	 * Identify which of two types is preferred
+	 *
+	 * @param   string  $a  The first item in the comparision
+	 * @param   string  $b  The second item in the comparison
+	 *
+	 * @return  void
+	 *
+	 * @since   11.1
+	 */
 	public static function _sortMime($a, $b)
 	{
-		if ($a[1] > $b[1]) {
+		if ($a[1] > $b[1])
+		{
 			return -1;
 		}
-		elseif ($a[1] < $b[1]) {
+		elseif ($a[1] < $b[1])
+		{
 			return 1;
 		}
-		else {
+		else
+		{
 			return 0;
 		}
 	}
@@ -230,7 +243,8 @@ class JBrowser extends JObject
 	 * @param   string  $userAgent  The browser string to parse.
 	 * @param   string  $accept     The HTTP_ACCEPT settings to use.
 	 *
-	 * @return	void
+	 * @return  void
+	 *
 	 * @since   11.1
 	 */
 	public function match($userAgent = null, $accept = null)
@@ -279,7 +293,8 @@ class JBrowser extends JObject
 		}
 
 		// Check for a mathplayer plugin is installed, so we can use MathML on several browsers.
-		if (strpos($this->_lowerAgent, 'mathplayer') !== false) {
+		if (strpos($this->_lowerAgent, 'mathplayer') !== false)
+		{
 			$this->setFeature('mathml');
 		}
 
@@ -304,6 +319,7 @@ class JBrowser extends JObject
 	 * Return the currently matched platform.
 	 *
 	 * @return  string  The user's platform.
+	 *
 	 * @since   11.1
 	 */
 	public function getPlatform()
@@ -337,6 +353,7 @@ class JBrowser extends JObject
 	 * Retrieve the current browser's major version.
 	 *
 	 * @return  integer  The current browser's major version
+	 *
 	 * @since   11.1.
 	 */
 	public function getMajor()
@@ -348,6 +365,7 @@ class JBrowser extends JObject
 	 * Retrieve the current browser's minor version.
 	 *
 	 * @return  integer  The current browser's minor version.
+	 *
 	 * @since   11.1
 	 */
 	public function getMinor()
@@ -359,6 +377,7 @@ class JBrowser extends JObject
 	 * Retrieve the current browser's version.
 	 *
 	 * @return  string  The current browser's version.
+	 *
 	 * @since   11.1
 	 */
 	public function getVersion()
@@ -370,6 +389,7 @@ class JBrowser extends JObject
 	 * Return the full browser agent string.
 	 *
 	 * @return  string  The browser agent string
+	 *
 	 * @since   11.1
 	 */
 	public function getAgentString()
@@ -381,6 +401,7 @@ class JBrowser extends JObject
 	 * Returns the server protocol in use on the current server.
 	 *
 	 * @return  string  The HTTP server protocol version.
+	 *
 	 * @since   11.1
 	 */
 	public static function getHTTPProtocol()
@@ -397,9 +418,10 @@ class JBrowser extends JObject
 	 * Set capabilities for the current browser.
 	 *
 	 * @param   string  $feature  The capability to set.
-	 * @param   string  $value Special capability parameter.
+	 * @param   string  $value    Special capability parameter.
 	 *
-	 * @return	void
+	 * @return  void
+	 *
 	 * @since   11.1
 	 */
 	public function setFeature($feature, $value = true)
@@ -407,13 +429,13 @@ class JBrowser extends JObject
 		$this->_features[$feature] = $value;
 	}
 
-
 	/**
 	 * Check the current browser capabilities.
 	 *
 	 * @param   string  $feature  The capability to check.
 	 *
 	 * @return  boolean  Does the browser have the capability set?
+	 *
 	 * @since   11.1
 	 */
 	public function hasFeature($feature)
@@ -427,6 +449,7 @@ class JBrowser extends JObject
 	 * @param   string  $feature  The capability to retrieve.
 	 *
 	 * @return  string  The value of the requested capability.
+	 *
 	 * @since   11.1
 	 */
 	public function getFeature($feature)
@@ -446,6 +469,7 @@ class JBrowser extends JObject
 	 * @param   string  $mimetype  The MIME type to check.
 	 *
 	 * @return  boolean  True if the browser can display the MIME type.
+	 *
 	 * @since   11.1
 	 */
 	public function isViewable($mimetype)
@@ -491,7 +515,8 @@ class JBrowser extends JObject
 	 *
 	 * @param   string  $browser  The browser to check.
 	 *
-	 * @return  boolean  True if the given browser the same as the current.
+	 * @return  boolean  Is the given browser the same as the current?
+	 *
 	 * @since   11.1
 	 */
 	public function isBrowser($browser)
@@ -520,6 +545,7 @@ class JBrowser extends JObject
 	 * Determines if the browser is mobile version or not.
 	 *
 	 * @return boolean  True if browser is a known mobile version.
+	 *
 	 * @since   11.1
 	 */
 	public function isMobile()
@@ -531,6 +557,7 @@ class JBrowser extends JObject
 	 * Determine if we are using a secure (SSL) connection.
 	 *
 	 * @return  boolean  True if using SSL, false if not.
+	 *
 	 * @since   11.1
 	 */
 	public static function isSSLConnection()

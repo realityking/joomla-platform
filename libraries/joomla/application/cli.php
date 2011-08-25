@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+defined('JPATH_PLATFORM') or die();
 
 jimport('joomla.application.applicationexception');
 jimport('joomla.application.input');
@@ -58,17 +58,19 @@ class JCli
 	protected function __construct()
 	{
 		// Close the application if we are not executed from the command line.
-		if (!defined('STDOUT') || !defined('STDIN') || !isset($_SERVER['argv'])) {
+		if (!defined('STDOUT') || !defined('STDIN') || !isset($_SERVER['argv']))
+		{
 			$this->close();
 		}
 
 		// Get the command line options
-		if (class_exists('JInput')) {
-			$this->input = new JInputCli;
+		if (class_exists('JInput'))
+		{
+			$this->input = new JInputCli();
 		}
 
 		// Create the registry with a default namespace of config
-		$this->config = new JRegistry;
+		$this->config = new JRegistry();
 
 		// Load the configuration object.
 		$this->loadConfiguration($this->fetchConfigurationData());
@@ -87,21 +89,24 @@ class JCli
 	 *
 	 * This method must be invoked as: $cli = JCli::getInstance();
 	 *
-	 * @param   string  $name  The name of the JCli class to instantiate.
+	 * @param   string  $name  The name (optional) of the JCli class to instantiate.
 	 *
 	 * @return  JCli  A JCli object
 	 *
 	 * @since   11.1
 	 */
-	public static function & getInstance($name = null)
+	public static function &getInstance($name = null)
 	{
 		// Only create the object if it doesn't exist.
-		if (empty(self::$instance)) {
-			if (class_exists($name) && (is_subclass_of($name, 'JCli'))) {
-				self::$instance = new $name;
+		if (empty(self::$instance))
+		{
+			if (class_exists($name) && (is_subclass_of($name, 'JCli')))
+			{
+				self::$instance = new $name();
 			}
-			else {
-				self::$instance = new JCli;
+			else
+			{
+				self::$instance = new JCli();
 			}
 		}
 
@@ -123,7 +128,7 @@ class JCli
 	/**
 	 * Exit the application.
 	 *
-	 * @param   integer  $code  Exit code.
+	 * @param   integer  $code  The exit code (optional; default is 0).
 	 *
 	 * @return  void
 	 *
@@ -146,10 +151,12 @@ class JCli
 	public function loadConfiguration($data)
 	{
 		// Load the data into the configuration object.
-		if (is_array($data)) {
+		if (is_array($data))
+		{
 			$this->config->loadArray($data);
 		}
-		elseif (is_object($data)) {
+		elseif (is_object($data))
+		{
 			$this->config->loadObject($data);
 		}
 	}
@@ -158,7 +165,7 @@ class JCli
 	 * Write a string to standard output.
 	 *
 	 * @param   string   $text  The text to display.
-	 * @param   boolean  $nl    True to append a new line at the end of the output string.
+	 * @param   boolean  $nl    True (default) to append a new line at the end of the output string.
 	 *
 	 * @return  void
 	 *
@@ -166,7 +173,7 @@ class JCli
 	 */
 	public function out($text = '', $nl = true)
 	{
-		fwrite(STDOUT, $text.($nl ? "\n" : null));
+		fwrite(STDOUT, $text . ($nl ? "\n" : null));
 	}
 
 	/**
@@ -200,7 +207,7 @@ class JCli
 	 * Calls all handlers associated with an event group.
 	 *
 	 * @param   string  $event  The event name.
-	 * @param   array   $args   An array of arguments.
+	 * @param   array   $args   An array of arguments (optional).
 	 *
 	 * @return  array   An array of results from each function call.
 	 *
@@ -214,13 +221,13 @@ class JCli
 	/**
 	 * Returns a property of the object or the default value if the property is not set.
 	 *
-	 * @param   string  $key      The name of the property
-	 * @param   mixed   $default  The default value if none is set.
+	 * @param   string  $key      The name of the property.
+	 * @param   mixed   $default  The default value (optional) if none is set.
 	 *
 	 * @return  mixed   The value of the configuration.
 	 *
 	 * @since   11.1
- 	 */
+	 */
 	public function get($key, $default = null)
 	{
 		return $this->config->get($key, $default);
@@ -229,8 +236,8 @@ class JCli
 	/**
 	 * Modifies a property of the object, creating it if it does not already exist.
 	 *
-	 * @param   string  $key    The name of the property
-	 * @param   mixed   $value  The value of the property to set
+	 * @param   string  $key    The name of the property.
+	 * @param   mixed   $value  The value of the property to set (optional).
 	 *
 	 * @return  mixed   Previous value of the property
 	 *
@@ -255,19 +262,21 @@ class JCli
 	protected function fetchConfigurationData()
 	{
 		// Set the configuration file name.
-		$file = JPATH_BASE.'/configuration.php';
+		$file = JPATH_BASE . '/configuration.php';
 
 		// Import the configuration file.
-		if (!is_file($file)) {
+		if (!is_file($file))
+		{
 			return false;
 		}
 		include_once $file;
 
 		// Instantiate the configuration object.
-		if (!class_exists('JConfig')) {
+		if (!class_exists('JConfig'))
+		{
 			return false;
 		}
-		$config = new JConfig;
+		$config = new JConfig();
 
 		return $config;
 	}
