@@ -215,7 +215,7 @@ abstract class JHtml
 		{
 			// PHP 5.3 workaround
 			$temp = array();
-			foreach ($args AS &$arg)
+			foreach ($args as &$arg)
 			{
 				$temp[] = &$arg;
 			}
@@ -696,6 +696,11 @@ abstract class JHtml
 		if (!$format)
 		{
 			$format = JText::_('DATE_FORMAT_LC1');
+		}
+		// format is an existing language key
+		elseif (JFactory::getLanguage()->hasKey($format))
+		{
+			$format = JText::_($format);
 		}
 
 		if ($gregorian)
