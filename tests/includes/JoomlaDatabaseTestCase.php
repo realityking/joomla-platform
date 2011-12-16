@@ -399,6 +399,23 @@ abstract class JoomlaDatabaseTestCase extends PHPUnit_Extensions_Database_TestCa
 	}
 
 	/**
+	 * Gets a mock cache object.
+	 *
+	 * @param   array  $data  Data to prime the cache with.
+	 *
+	 * @return  JConfig
+	 *
+	 * @since   12.1
+	 */
+	public function getMockCache($data = array())
+	{
+		// Load the mock class builder.
+		require_once JPATH_TESTS . '/includes/mocks/JCacheMock.php';
+
+		return JCacheGlobalMock::create($this, $data);
+	}
+
+	/**
 	 * Gets a mock configuration object.
 	 *
 	 * @return  JConfig
@@ -510,22 +527,24 @@ abstract class JoomlaDatabaseTestCase extends PHPUnit_Extensions_Database_TestCa
 
 		return JSessionGlobalMock::create($this, $options);
 	}
-	
+
 	/**
 	 * Gets a mock web object.
+	 *
+	 * @param   array  $options  A set of options to configure the mock.
 	 *
 	 * @return  JWeb
 	 *
 	 * @since   12.1
 	 */
-	public function getMockWeb()
+	public function getMockWeb($options = array())
 	{
 		// Load the real class first otherwise the mock will be used if jimport is called again.
 		require_once JPATH_PLATFORM . '/joomla/application/web.php';
-	
+
 		// Load the mock class builder.
 		require_once JPATH_TESTS . '/includes/mocks/JWebMock.php';
-	
-		return JWebGlobalMock::create($this);
+
+		return JWebGlobalMock::create($this, $options);
 	}
 }

@@ -37,7 +37,7 @@ class JSessionGlobalMock
 	}
 
 	/**
-	 * Creates an instance of the mock JDatabase object.
+	 * Creates an instance of the mock JSession object.
 	 *
 	 * @param   object  $test    A test object.
 	 * @param   array   $config  An array of optional configuration values.
@@ -110,7 +110,7 @@ class JSessionGlobalMock
 	}
 
 	/**
-	 * Mocking the quote method.
+	 * Mocking the get method.
 	 *
 	 * @param   string  $key  The key to get.
 	 *
@@ -130,6 +130,7 @@ class JSessionGlobalMock
 				$user->id = (int) self::getOption('get.user.id', 0);
 				$user->name = self::getOption('get.user.name');
 				$user->username = self::getOption('get.user.username');
+				$user->guest = (int) self::getOption('get.user.guest', 1);
 
 				return $user;
 		}
