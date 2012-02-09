@@ -40,10 +40,10 @@ class JHttp
 	 *
 	 * @since   11.3
 	 */
-	public function __construct(JRegistry &$options = null, JHttpTransport $transport = null)
+	public function __construct(JRegistry $options = null, JHttpTransport $transport = null)
 	{
 		$this->options   = isset($options) ? $options : new JRegistry;
-		$this->transport = isset($transport) ? $transport : JHttpFactory::getAvailableDriver($this->options);
+		$this->transport = isset($transport) ? $transport : new JHttpTransportStream($this->options);
 	}
 
 	/**
@@ -183,5 +183,29 @@ class JHttp
 	{
 		return $this->transport->request('TRACE', new JUri($url), null, $headers);
 	}
+	
+	/**
+	 * Download a url to a file using GET.
+	 * If the file already exists it will be overwritten.
+	 *
+	 * @param   string  $url      Path to the resource.
+	 * @param   array   $headers  An array of name-value pairs to include in the header of the request.
+	 * @param   string  $file     Path to the file to which the the resource should be downloaded
+	 *
+	 * @return  bool    True on success
+	 *
+	 * @since   12.1
+	 */
+	public function download($url, array $headers = null, $file)
+	{
+		jimport('joomla.filesystem.file');
+		jimport('joomla.filesystem.path');
+		$file = JPatch::check($file);
+		if (JFile::exists($file))
+		{
+			JFile::delete($file);
+		}
 
+		$result = $this->transport->request('GET', new JUri($url), null, $headers, null, null, $file);
+	}
 }

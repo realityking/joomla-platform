@@ -25,17 +25,19 @@ interface JHttpTransport
 	 *
 	 * @since   11.3
 	 */
-	public function __construct(JRegistry &$options);
+	public function __construct(JRegistry $options);
 
 	/**
 	 * Send a request to the server and return a JHttpResponse object with the response.
 	 *
-	 * @param   string   $method     The HTTP method for sending the request.
-	 * @param   JUri     $uri        The URI to the resource to request.
-	 * @param   mixed    $data       Either an associative array or a string to be sent with the request.
-	 * @param   array    $headers    An array of request headers to send with the request.
-	 * @param   integer  $timeout    Read timeout in seconds.
-	 * @param   string   $userAgent  The optional user agent string to send with the request.
+	 * @param   string    $method     The HTTP method for sending the request.
+	 * @param   JUri      $uri        The URI to the resource to request.
+	 * @param   mixed     $data       Either an associative array or a string to be sent with the request.
+	 * @param   array     $headers    An array of request headers to send with the request.
+	 * @param   integer   $timeout    Read timeout in seconds.
+	 * @param   string    $userAgent  The optional user agent string to send with the request.
+	 * @param   string    $file       Location the downloaded data will be saved to.
+	 *                                The JHttpResponse won't contain the data in this case.
 	 *
 	 * @return  JHttpResponse
 	 *

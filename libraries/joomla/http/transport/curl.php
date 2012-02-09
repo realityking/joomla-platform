@@ -32,7 +32,7 @@ class JHttpTransportCurl implements JHttpTransport
 	 * @since   11.3
 	 * @throws  RuntimeException
 	 */
-	public function __construct(JRegistry &$options)
+	public function __construct(JRegistry $options)
 	{
 		if (!function_exists('curl_init') || !is_callable('curl_init'))
 		{
@@ -45,18 +45,20 @@ class JHttpTransportCurl implements JHttpTransport
 	/**
 	 * Send a request to the server and return a JHttpResponse object with the response.
 	 *
-	 * @param   string   $method     The HTTP method for sending the request.
-	 * @param   JUri     $uri        The URI to the resource to request.
-	 * @param   mixed    $data       Either an associative array or a string to be sent with the request.
-	 * @param   array    $headers    An array of request headers to send with the request.
-	 * @param   integer  $timeout    Read timeout in seconds.
-	 * @param   string   $userAgent  The optional user agent string to send with the request.
+	 * @param   string    $method     The HTTP method for sending the request.
+	 * @param   JUri      $uri        The URI to the resource to request.
+	 * @param   mixed     $data       Either an associative array or a string to be sent with the request.
+	 * @param   array     $headers    An array of request headers to send with the request.
+	 * @param   integer   $timeout    Read timeout in seconds.
+	 * @param   string    $userAgent  The optional user agent string to send with the request.
+	 * @param   resource  $fp         Location the downloaded data will be saved to.
+	 *                                The JHttpResponse won't contain the data in this case.
 	 *
 	 * @return  JHttpResponse
 	 *
 	 * @since   11.3
 	 */
-	public function request($method, JUri $uri, $data = null, array $headers = null, $timeout = null, $userAgent = null)
+	public function request($method, JUri $uri, $data = null, array $headers = null, $timeout = null, $userAgent = null, $fp = null)
 	{
 		// Setup the cURL handle.
 		$ch = curl_init();
@@ -121,8 +123,22 @@ class JHttpTransportCurl implements JHttpTransport
 		// We want our headers. :-)
 		$options[CURLOPT_HEADER] = true;
 
-		// Return it... echoing it would be tacky.
-		$options[CURLOPT_RETURNTRANSFER] = true;
+		if (is_string($file))
+		{
+			// Open the file for writing
+			$fp = @fopen($target, 'wb');
+
+			if (!is_resource($fp)
+			{
+				throw new RuntimeException(JText::_("JLIB_HTTP_ERROR_OPEN_FILE"));
+			}
+			$options[CURLOPT_FILE] = $file;
+		}
+		else
+		{
+			// Return it... echoing it would be tacky.
+			$options[CURLOPT_RETURNTRANSFER] = true;
+		}
 
 		// Set the cURL options.
 		curl_setopt_array($ch, $options);
