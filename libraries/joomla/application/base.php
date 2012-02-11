@@ -103,4 +103,24 @@ abstract class JApplicationBase extends JObject
 	{
 		$this->dispatcher = JDispatcher::getInstance();
 	}
+
+	/**
+	 * Returns the document charset encoding.
+	 *
+	 * @return  string
+	 *
+	 * @since   12.1
+	 */
+	abstract function getCharset();
+	
+	/**
+	 * Sets the document charset
+	 *
+	 * @param   string  $type  Charset encoding string
+	 *
+	 * @return  JApplication instance of $this to allow chaining
+	 *
+	 * @since   12.1
+	 */
+	abstract function setCharset($charset);
 }

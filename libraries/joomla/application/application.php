@@ -617,6 +617,34 @@ class JApplication extends JApplicationBase
 	}
 
 	/**
+	 * Returns the document charset encoding.
+	 *
+	 * @return  string
+	 *
+	 * @since   12.1
+	 */
+	function getCharset()
+	{
+		return JFactory::getDocument()->getCharset();
+	}
+
+	/**
+	 * Sets the document charset
+	 *
+	 * @param   string  $charset  Charset encoding string
+	 *
+	 * @return  JApplication instance of $this to allow chaining
+	 *
+	 * @since   12.1
+	 */
+	function setCharset($charset)
+	{
+		JFactory::getDocument()->setCharset($charset);
+
+		return $this;
+	}
+
+	/**
 	 * Login authentication function.
 	 *
 	 * Username and encoded password are passed the onUserLogin event which

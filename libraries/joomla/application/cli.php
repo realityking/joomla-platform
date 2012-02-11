@@ -300,6 +300,32 @@ class JApplicationCli extends JApplicationBase
 	{
 		// Your application routines go here.
 	}
+
+	/**
+	 * Returns the document charset encoding.
+	 *
+	 * @return  string
+	 *
+	 * @since   12.1
+	 */
+	function getCharset()
+	{
+		return '';
+	}
+	
+	/**
+	 * Sets the document charset
+	 *
+	 * @param   string  $type  Charset encoding string
+	 *
+	 * @return  JApplication instance of $this to allow chaining
+	 *
+	 * @since   12.1
+	 */
+	function setCharset($charset)
+	{
+		return $this;
+	}
 }
 
 /**
