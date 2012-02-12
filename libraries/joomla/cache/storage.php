@@ -67,7 +67,7 @@ class JCacheStorage
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		$config = JFactory::getConfig();
 		$this->_hash = md5($config->get('secret'));
@@ -102,7 +102,7 @@ class JCacheStorage
 	 *
 	 * @since   11.1
 	 */
-	public static function getInstance($handler = null, $options = array())
+	public static function getInstance($handler = null, array $options = array())
 	{
 		static $now = null;
 

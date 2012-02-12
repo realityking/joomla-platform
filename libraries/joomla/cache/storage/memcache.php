@@ -44,7 +44,7 @@ class JCacheStorageMemcache extends JCacheStorage
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		parent::__construct($options);
 		if (self::$_db === null)

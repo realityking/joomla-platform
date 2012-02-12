@@ -38,7 +38,7 @@ class JCacheStorageCachelite extends JCacheStorage
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		parent::__construct($options);
 
@@ -70,7 +70,7 @@ class JCacheStorageCachelite extends JCacheStorage
 	 *
 	 * @since   11.1
 	 */
-	protected function initCache($cloptions)
+	protected function initCache(array $cloptions)
 	{
 		require_once 'Cache/Lite.php';
 

@@ -56,7 +56,7 @@ class JCacheControllerCallback extends JCacheController
 	 *
 	 * @since   11.1
 	 */
-	public function get($callback, $args = array(), $id = false, $wrkarounds = false, $woptions = array())
+	public function get($callback, array $args = array(), $id = false, $wrkarounds = false, array $woptions = array())
 	{
 
 		// Normalize callback
