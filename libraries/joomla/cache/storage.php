@@ -239,13 +239,26 @@ class JCacheStorage
 	}
 
 	/**
-	 * Test to see if the storage handler is available.
+	 * Test to see if the cache storage is available.
 	 *
-	 * @return   boolean  True on success, false otherwise
+	 * @return  boolean  True on success, false otherwise.
 	 *
-	 * @since    11.1.
+	 * @since   11.1
+	 * @deprecated  12.3  Use isSupported() instead.
 	 */
 	public static function test()
+	{
+		return static::isSupported();
+	}
+
+	/**
+	 * Test to see if the cache storage is available.
+	 *
+	 * @return  boolean  True on success, false otherwise.
+	 *
+	 * @since   12.1
+	 */
+	public static function isSupported()
 	{
 		return true;
 	}

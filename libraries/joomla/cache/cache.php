@@ -106,16 +106,15 @@ class JCache extends JObject
 		foreach ($handlers as $handler)
 		{
 			$name = substr($handler, 0, strrpos($handler, '.'));
-			$class = 'JCacheStorage' . $name;
+			$class = 'JCacheStorage' . ucfirst($name);
 
-			if (!class_exists($class))
+			if (class_exists($class))
 			{
-				include_once __DIR__ . '/storage/' . $name . '.php';
-			}
-
-			if (call_user_func_array(array(trim($class), 'test'), array()))
-			{
-				$names[] = $name;
+				// @deprecated Change to check isSupported() when test() is removed
+				if ($class::test())
+				{
+					$names[] = $name;
+				}
 			}
 		}
 
