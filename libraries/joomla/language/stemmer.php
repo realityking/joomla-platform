@@ -75,4 +75,15 @@ abstract class JLanguageStemmer
 	 * @since   12.1
 	 */
 	abstract public function stem($token, $lang);
+
+	/**
+	 * Test if a stemmer supports a given language.
+	 *
+	 * @param   string  $lang   The language to test.
+	 *
+	 * @return  boolean  True if the language is supported.
+	 *
+	 * @since   12.1
+	 */
+	abstract public function supportsLanguage($lang);
 }

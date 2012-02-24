@@ -79,6 +79,24 @@ class JLanguageStemmerPorteren extends JLanguageStemmer
 
 		return $this->cache[$lang][$token];
 	}
+	
+	/**
+	 * Test if a stemmer supports a given language.
+	 *
+	 * @param   string  $lang   The language to test.
+	 *
+	 * @return  boolean  True if the language is supported.
+	 *
+	 * @since   12.1
+	 */
+	public function supportsLanguage($lang)
+	{
+		if ($lang === 'en')
+		{
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Step 1
