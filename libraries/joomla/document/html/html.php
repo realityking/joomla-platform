@@ -93,14 +93,6 @@ class JDocumentHTML extends JDocument
 	protected $_caching = null;
 
 	/**
-	 * Set to true when the document should be output as HTML%
-	 *
-	 * @var    boolean
-	 * @since  12.1
-	 */
-	private $_html5 = null;
-
-	/**
 	 * Class constructor
 	 *
 	 * @param   array  $options  Associative array of options
@@ -310,35 +302,6 @@ class JDocumentHTML extends JDocument
 		$this->_custom[] = trim($html);
 
 		return $this;
-	}
-
-	/**
-	 * Returns whether the document is set up to be output as HTML5
-	 *
-	 * @return  Boolean true when HTML5 is used
-	 *
-	 * @since   12.1
-	 */
-	public function isHtml5()
-	{
-		return $this->_html5;
-	}
-
-	/**
-	 * Sets whether the document should be output as HTML5
-	 *
-	 * @param   bool  $state  True when HTML5 should be output
-	 *
-	 * @return  void
-	 *
-	 * @since   12.1
-	 */
-	public function setHtml5($state)
-	{
-		if (is_bool($state))
-		{
-			$this->_html5 = $state;
-		}
 	}
 
 	/**

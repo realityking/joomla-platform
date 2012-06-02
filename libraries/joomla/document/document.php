@@ -790,7 +790,6 @@ class JDocument extends JObject
 	 * http://www.w3.org/TR/xhtml-media-types/}) for more details.
 	 *
 	 * @param   string   $type  The document type to be sent
-	 * @param   boolean  $sync  Should the type be synced with HTML?
 	 *
 	 * @return  JDocument instance of $this to allow chaining
 	 *
@@ -798,15 +797,9 @@ class JDocument extends JObject
 	 *
 	 * @link    http://www.w3.org/TR/xhtml-media-types
 	 */
-	public function setMimeEncoding($type = 'text/html', $sync = true)
+	public function setMimeEncoding($type = 'text/html')
 	{
 		$this->_mime = strtolower($type);
-
-		// Syncing with meta-data
-		if ($sync)
-		{
-			$this->setMetaData('content-type', $type . '; charset=' . $this->_charset, true);
-		}
 
 		return $this;
 	}
