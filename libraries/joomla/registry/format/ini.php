@@ -69,7 +69,7 @@ class JRegistryFormatINI extends JRegistryFormat
 	 * Parse an INI formatted string and convert it into an object.
 	 *
 	 * @param   string  $data     INI formatted string to convert.
-	 * @param   mixed   $options  An array of options used by the formatter, or a boolean setting to process sections.
+	 * @param   array   $options  An array of options used by the formatter.
 	 *
 	 * @return  object   Data object.
 	 *
