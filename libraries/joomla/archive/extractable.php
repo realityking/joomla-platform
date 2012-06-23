@@ -25,7 +25,7 @@ interface JArchiveExtractable
 	 * @param   string  $destination  Path to extract archive to
 	 * @param   array   $options      Extraction options [may be unused]
 	 *
-	 * @return  boolean  True if successful
+	 * @return  void
 	 *
 	 * @since   12.1
 	 */

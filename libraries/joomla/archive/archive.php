@@ -37,6 +37,7 @@ class JArchive
 	 *
 	 * @since   11.1
 	 * @throws  InvalidArgumentException
+	 * @throws  RuntimeException
 	 */
 	public static function extract($archivename, $extractdir)
 	{
@@ -57,7 +58,22 @@ class JArchive
 
 				if ($adapter)
 				{
-					$result = $adapter->extract($archivename, $extractdir);
+					try
+					{
+						$result = $adapter->extract($archivename, $extractdir);
+					}
+					catch (RuntimeException $e)
+					{
+						if (class_exists('JError'))
+						{
+							JError::raiseWarning(100, $e->getMessage());
+							return false;
+						}
+						else
+						{
+							throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+						}
+					}
 				}
 				break;
 
@@ -66,7 +82,22 @@ class JArchive
 
 				if ($adapter)
 				{
-					$result = $adapter->extract($archivename, $extractdir);
+					try
+					{
+						$result = $adapter->extract($archivename, $extractdir);
+					}
+					catch (RuntimeException $e)
+					{
+						if (class_exists('JError'))
+						{
+							JError::raiseWarning(100, $e->getMessage());
+							return false;
+						}
+						else
+						{
+							throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+						}
+					}
 				}
 				break;
 
@@ -82,13 +113,23 @@ class JArchive
 				{
 					$config = JFactory::getConfig();
 					$tmpfname = $config->get('tmp_path') . '/' . uniqid('gzip');
-					$gzresult = $adapter->extract($archivename, $tmpfname);
-
-					if ($gzresult instanceof Exception)
+					try
+					{
+						$gzresult = $adapter->extract($archivename, $extractdir);
+					}
+					catch (RuntimeException $e)
 					{
 						@unlink($tmpfname);
 
-						return false;
+						if (class_exists('JError'))
+						{
+							JError::raiseWarning(100, $e->getMessage());
+							return false;
+						}
+						else
+						{
+							throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+						}
 					}
 
 					if ($untar)
@@ -98,7 +139,22 @@ class JArchive
 
 						if ($tadapter)
 						{
-							$result = $tadapter->extract($tmpfname, $extractdir);
+							try
+							{
+								$result = $tadapter->extract($archivename, $extractdir);
+							}
+							catch (RuntimeException $e)
+							{
+								if (class_exists('JError'))
+								{
+									JError::raiseWarning(100, $e->getMessage());
+									return false;
+								}
+								else
+								{
+									throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+								}
+							}
 						}
 					}
 					else
@@ -125,12 +181,23 @@ class JArchive
 				{
 					$config = JFactory::getConfig();
 					$tmpfname = $config->get('tmp_path') . '/' . uniqid('bzip2');
-					$bzresult = $adapter->extract($archivename, $tmpfname);
-
-					if ($bzresult instanceof Exception)
+					try
+					{
+						$bzresult = $adapter->extract($archivename, $extractdir);
+					}
+					catch (RuntimeException $e)
 					{
 						@unlink($tmpfname);
-						return false;
+
+						if (class_exists('JError'))
+						{
+							JError::raiseWarning(100, $e->getMessage());
+							return false;
+						}
+						else
+						{
+							throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+						}
 					}
 
 					if ($untar)
@@ -140,7 +207,22 @@ class JArchive
 
 						if ($tadapter)
 						{
-							$result = $tadapter->extract($tmpfname, $extractdir);
+							try
+							{
+								$result = $tadapter->extract($archivename, $extractdir);
+							}
+							catch (RuntimeException $e)
+							{
+								if (class_exists('JError'))
+								{
+									JError::raiseWarning(100, $e->getMessage());
+									return false;
+								}
+								else
+								{
+									throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+								}
+							}
 						}
 					}
 					else
@@ -156,11 +238,6 @@ class JArchive
 
 			default:
 				throw new InvalidArgumentException('Unknown Archive Type');
-		}
-
-		if (!$result || $result instanceof Exception)
-		{
-			return false;
 		}
 
 		return true;
@@ -184,7 +261,7 @@ class JArchive
 			$class = 'JArchive' . ucfirst($type);
 			if (!class_exists($class))
 			{
-				throw new UnexpectedValueException('Unable to load archive', 500);
+				throw new UnexpectedValueException('Unable to load archive adapter.', 500);
 			}
 
 			self::$adapters[$type] = new $class;
