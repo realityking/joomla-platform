@@ -78,12 +78,26 @@ class JSession implements IteratorAggregate
 	protected static $instance;
 
 	/**
+	 * @var    string
+	 * @since  12.2
+	 */
+	protected $storeName;
+
+	/**
 	 * Holds the JInput object
 	 *
 	 * @var    JInput
 	 * @since  12.2
 	 */
 	private $_input = null;
+
+	/**
+	 * Holds the dispatcher object
+	 *
+	 * @var    JEventDispatcher
+	 * @since  12.2
+	 */
+	private $_dispatcher = null;
 
 	/**
 	 * Constructor
@@ -111,13 +125,37 @@ class JSession implements IteratorAggregate
 		// Create handler
 		$this->_store = JSessionStorage::getInstance($store, $options);
 
+		$this->storeName = $store;
+
 		// Set options
 		$this->_setOptions($options);
 
 		$this->_setCookieParams();
 
 		$this->_state = 'inactive';
+	}
 
+	/**
+	 * Magic method to get red-only access to properties.
+	 *
+	 * @param   string  $name  Name of property to retrieve
+	 *
+	 * @return  mixed   The value of the property
+	 *
+	 * @since   12.2
+	 */
+	public function __get($name)
+	{
+		if ($name === 'storeName')
+		{
+			return $this->$name;
+		}
+
+		if ($name === 'state' || $name === 'expire')
+		{
+			$property = '_' . $name;
+			return $this->$property;
+		}
 	}
 
 	/**
@@ -234,6 +272,7 @@ class JSession implements IteratorAggregate
 	{
 		$user    = JFactory::getUser();
 		$session = JFactory::getSession();
+		$session->start();
 
 		// TODO: Decouple from legacy JApplication class.
 		if (is_callable(array('JApplication', 'getHash')))
@@ -405,7 +444,8 @@ class JSession implements IteratorAggregate
 	/**
 	 * Check whether this session is currently created
 	 *
-	 * @param   JInput  $input  JInput object for the session to use.
+	 * @param   JInput            $input       JInput object for the session to use.
+	 * @param   JEventDispatcher  $dispatcher  Dispatcher object for the session to use.
 	 *
 	 * @return  void.
 	 *
@@ -414,6 +454,7 @@ class JSession implements IteratorAggregate
 	public function initialise(JInput $input)
 	{
 		$this->_input = $input;
+		$this->_dispatcher = $dispatcher;
 	}
 
 	/**
@@ -447,7 +488,7 @@ class JSession implements IteratorAggregate
 	}
 
 	/**
-	 * Set data into the session store.
+	 * Set data into the session store. If a session has not been started it will be started.
 	 *
 	 * @param   string  $name       Name of a variable.
 	 * @param   mixed   $value      Value of a variable.
@@ -461,6 +502,11 @@ class JSession implements IteratorAggregate
 	{
 		// Add prefix to namespace to avoid collisions
 		$namespace = '__' . $namespace;
+
+		if ($this->_state === 'inactive')
+		{
+			$this->start();
+		}
 
 		if ($this->_state !== 'active')
 		{
@@ -538,14 +584,19 @@ class JSession implements IteratorAggregate
 	}
 
 	/**
-	 * Start a session.
+	 * Start the session.
 	 *
-	 * @return  boolean  true on success
+	 * @return  void
 	 *
 	 * @since   12.2
 	 */
 	public function start()
 	{
+		if ($this->_state === 'active')
+		{
+			return;
+		}
+
 		$this->_start();
 
 		$this->_state = 'active';
@@ -557,7 +608,14 @@ class JSession implements IteratorAggregate
 		// Perform security checks
 		$this->_validate();
 
-		return true;
+		// If the session is new, load the user and registry objects.
+		if ($this->isNew())
+		{
+			$this->set('registry', new JRegistry);
+			$this->set('user', new JUser);
+		}
+
+		$this->_dispatcher->trigger('onAfterSessionStart');
 	}
 
 	/**
@@ -595,7 +653,7 @@ class JSession implements IteratorAggregate
 			}
 		}
 
-		/** 
+		/**
 		 * Write and Close handlers are called after destructing objects since PHP 5.0.5.
 		 * Thus destructors can use sessions but session handler can't use objects.
 		 * So we are moving session closure before destructing objects.
