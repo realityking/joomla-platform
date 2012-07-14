@@ -141,7 +141,7 @@ abstract class JModelLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	protected static function _createFileName($type, $parts = array())
+	protected static function _createFileName($type, array $parts = array())
 	{
 		$filename = '';
 
@@ -166,7 +166,7 @@ abstract class JModelLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	public static function getInstance($type, $prefix = '', $config = array())
+	public static function getInstance($type, $prefix = '', array $config = array())
 	{
 		$type = preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
 		$modelClass = $prefix . ucfirst($type);
@@ -206,7 +206,7 @@ abstract class JModelLegacy extends JObject
 	 * @since   12.2
 	 * @throws  Exception
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		// Guess the option from the class name (Option)Model(View).
 		if (empty($this->option))
@@ -331,7 +331,7 @@ abstract class JModelLegacy extends JObject
 	 * @since   12.2
 	 * @see     JTable::getInstance
 	 */
-	protected function _createTable($name, $prefix = 'Table', $config = array())
+	protected function _createTable($name, $prefix = 'Table', array $config = array())
 	{
 		// Clean the model name
 		$name = preg_replace('/[^A-Z0-9_]/i', '', $name);
@@ -418,7 +418,7 @@ abstract class JModelLegacy extends JObject
 	 * @since   12.2
 	 * @throws  Exception
 	 */
-	public function getTable($name = '', $prefix = 'Table', $options = array())
+	public function getTable($name = '', $prefix = 'Table', array $options = array())
 	{
 		if (empty($name))
 		{

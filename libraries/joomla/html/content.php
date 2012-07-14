@@ -29,7 +29,7 @@ abstract class JHtmlContent
 	 *
 	 * @since   11.1
 	 */
-	public static function prepare($text, $params = null, $context = 'text')
+	public static function prepare($text, array $params = null, $context = 'text')
 	{
 		if ($params === null)
 		{

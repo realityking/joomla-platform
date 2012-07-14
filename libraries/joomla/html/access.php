@@ -198,7 +198,7 @@ abstract class JHtmlAccess
 	 * @see     JAccess
 	 * @since   11.1
 	 */
-	public static function actions($name, $selected, $component, $section = 'global')
+	public static function actions($name, array $selected, $component, $section = 'global')
 	{
 		static $count;
 
@@ -269,7 +269,7 @@ abstract class JHtmlAccess
 	 *
 	 * @since   11.1
 	 */
-	public static function assetgrouplist($name, $selected, $attribs = null, $config = array())
+	public static function assetgrouplist($name, $selected, $attribs = null, array $config = array())
 	{
 		static $count;
 

@@ -61,9 +61,9 @@ class JDatabaseDriverOracle extends JDatabaseDriverPdo
 	 *
 	 * @since   12.1
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
-		$options['driver'] = 'oci';
+		$options['driver']     = 'oci';
 		$options['charset']    = (isset($options['charset'])) ? $options['charset']   : 'AL32UTF8';
 		$options['dateformat'] = (isset($options['dateformat'])) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
 

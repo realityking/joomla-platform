@@ -199,8 +199,8 @@ abstract class JHtml
 	/**
 	 * Function caller method
 	 *
-	 * @param   string  $function  Function or method to call
-	 * @param   array   $args      Arguments to be passed to function
+	 * @param   callable  $function  Function or method to call
+	 * @param   array     $args      Arguments to be passed to function
 	 *
 	 * @return  mixed   Function result or false on error.
 	 *
@@ -210,27 +210,25 @@ abstract class JHtml
 	 */
 	protected static function call($function, $args)
 	{
-		if (is_callable($function))
+		if (!is_callable($function))
 		{
-			// PHP 5.3 workaround
-			$temp = array();
-			foreach ($args as &$arg)
-			{
-				$temp[] = &$arg;
-			}
-			return call_user_func_array($function, $temp);
+			throw new InvalidArgumentException('$function has to be callable', 500);
 		}
-		else
+
+		// PHP 5.3 workaround
+		$temp = array();
+		foreach ($args as &$arg)
 		{
-			throw new InvalidArgumentException('Function not supported', 500);
+			$temp[] = &$arg;
 		}
+		return call_user_func_array($function, $temp);
 	}
 
 	/**
 	 * Write a <a></a> element
 	 *
 	 * @param   string  $url      The relative URL to use for the href attribute
-	 * @param   string  $text     The target attribute to use
+	 * @param   mixed   $text     Attributes to be added to the stylesheet. Must be an array or a string.
 	 * @param   array   $attribs  An associative array of attributes to add
 	 *
 	 * @return  string  <a></a> string
@@ -251,7 +249,7 @@ abstract class JHtml
 	 * Write a <iframe></iframe> element
 	 *
 	 * @param   string  $url       The relative URL to use for the src attribute
-	 * @param   string  $name      The target attribute to use
+	 * @param   mixed   $name      Attributes to be added to the stylesheet. Must be an array or a string.
 	 * @param   array   $attribs   An associative array of attributes to add
 	 * @param   string  $noFrames  The message to display if the iframe tag is not supported
 	 *
@@ -509,8 +507,8 @@ abstract class JHtml
 	 *
 	 * @param   string   $file       The relative or absolute URL to use for the src attribute
 	 * @param   string   $alt        The alt text.
-	 * @param   string   $attribs    The target attribute to use
-	 * @param   array    $relative   An associative array of attributes to add
+	 * @param   mixed    $attribs    Attributes to be added to the stylesheet. Must be an array or a string.
+	 * @param   boolean  $relative   An associative array of attributes to add
 	 * @param   boolean  $path_only  If set to true, it tries to find an override for the file in the template
 	 *
 	 * @return  string
@@ -548,7 +546,7 @@ abstract class JHtml
 	 * Write a <link rel="stylesheet" style="text/css" /> element
 	 *
 	 * @param   string   $file            path to file
-	 * @param   array    $attribs         attributes to be added to the stylesheet
+	 * @param   mixed    $attribs         Attributes to be added to the stylesheet. Must be an array or a string.
 	 * @param   boolean  $relative        path to file is relative to /media folder
 	 * @param   boolean  $path_only       return the path to the file only
 	 * @param   boolean  $detect_browser  detect browser to include specific browser css files
@@ -839,7 +837,7 @@ abstract class JHtml
 	 *
 	 * @since   11.1
 	 */
-	public static function calendar($value, $name, $id, $format = '%Y-%m-%d', $attribs = null)
+	public static function calendar($value, $name, $id, $format = '%Y-%m-%d', array $attribs = null)
 	{
 		static $done;
 

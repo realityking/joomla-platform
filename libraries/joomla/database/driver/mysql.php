@@ -34,7 +34,7 @@ class JDatabaseDriverMysql extends JDatabaseDriverMysqli
 	 *
 	 * @since   12.1
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
 		$options['host'] = (isset($options['host'])) ? $options['host'] : 'localhost';

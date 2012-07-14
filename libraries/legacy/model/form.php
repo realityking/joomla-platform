@@ -123,7 +123,7 @@ abstract class JModelForm extends JModelLegacy
 	 *
 	 * @since   12.2
 	 */
-	abstract public function getForm($data = array(), $loadData = true);
+	abstract public function getForm(array $data = array(), $loadData = true);
 
 	/**
 	 * Method to get a form object.
@@ -139,7 +139,7 @@ abstract class JModelForm extends JModelLegacy
 	 * @see     JForm
 	 * @since   12.2
 	 */
-	protected function loadForm($name, $source = null, $options = array(), $clear = false, $xpath = false)
+	protected function loadForm($name, $source = null, array $options = array(), $clear = false, $xpath = false)
 	{
 		// Handle the optional arguments.
 		$options['control'] = JArrayHelper::getValue($options, 'control', false);
@@ -253,7 +253,7 @@ abstract class JModelForm extends JModelLegacy
 	 * @see     JFilterInput
 	 * @since   12.2
 	 */
-	public function validate($form, $data, $group = null)
+	public function validate(JForm $form, array $data, $group = null)
 	{
 		// Filter and validate the form data.
 		$data = $form->filter($data);

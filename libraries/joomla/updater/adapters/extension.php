@@ -10,6 +10,7 @@
 defined('JPATH_PLATFORM') or die;
 
 jimport('joomla.updater.updateadapter');
+
 /**
  * Extension class for updater
  *
@@ -30,7 +31,7 @@ class JUpdaterExtension extends JUpdateAdapter
 	 *
 	 * @since   11.1
 	 */
-	protected function _startElement($parser, $name, $attrs = array())
+	protected function _startElement($parser, $name, array $attrs = array())
 	{
 		array_push($this->stack, $name);
 		$tag = $this->_getStackLocation();
@@ -148,7 +149,7 @@ class JUpdaterExtension extends JUpdateAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function findUpdate($options)
+	public function findUpdate(array $options)
 	{
 		$url = $options['location'];
 		$this->_url = &$url;

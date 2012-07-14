@@ -37,7 +37,7 @@ class JCacheController
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		$this->cache = new JCache($options);
 		$this->options = & $this->cache->_options;
@@ -79,7 +79,7 @@ class JCacheController
 	 * @since   11.1
 	 * @throws  RuntimeException
 	 */
-	public static function getInstance($type = 'output', $options = array())
+	public static function getInstance($type = 'output', array $options = array())
 	{
 		self::addIncludePath(JPATH_PLATFORM . '/joomla/cache/controller');
 

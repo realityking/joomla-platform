@@ -59,7 +59,7 @@ class JModelList extends JModelLegacy
 	 * @see     JModelLegacy
 	 * @since   12.2
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		parent::__construct($config);
 

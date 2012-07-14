@@ -91,7 +91,7 @@ class JUpdaterCollection extends JUpdateAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function _startElement($parser, $name, $attrs = array())
+	public function _startElement($parser, $name, array $attrs = array())
 	{
 		array_push($this->stack, $name);
 		$tag = $this->_getStackLocation();
@@ -209,7 +209,7 @@ class JUpdaterCollection extends JUpdateAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function findUpdate($options)
+	public function findUpdate(array $options)
 	{
 		$url = $options['location'];
 		$this->updateSiteId = $options['update_site_id'];

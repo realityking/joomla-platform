@@ -252,7 +252,7 @@ class JAuthentication extends JObject
 	 * @see     JAuthenticationResponse
 	 * @since   11.1
 	 */
-	public function authenticate($credentials, $options = array())
+	public function authenticate(array $credentials, array $options = array())
 	{
 		// Get plugins
 		$plugins = JPluginHelper::getPlugin('authentication');
@@ -323,7 +323,7 @@ class JAuthentication extends JObject
 	 *
 	 * @since  11.2
 	 */
-	public static function authorise($response, $options = array())
+	public static function authorise($response, array $options = array())
 	{
 		// Get plugins in case they haven't been imported already
 		JPluginHelper::importPlugin('user');

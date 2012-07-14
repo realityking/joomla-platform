@@ -64,7 +64,7 @@ abstract class JHtmlMenu
 	 *
 	 * @return  array
 	 */
-	public static function menuitems($config = array())
+	public static function menuitems(array $config = array())
 	{
 		if (empty(self::$items))
 		{
@@ -150,7 +150,7 @@ abstract class JHtmlMenu
 	 *
 	 * @return  string
 	 */
-	public static function menuitemlist($name, $selected = null, $attribs = null, $config = array())
+	public static function menuitemlist($name, $selected = null, $attribs = null, array $config = array())
 	{
 		static $count;
 
@@ -306,7 +306,7 @@ abstract class JHtmlMenu
 	 *
 	 * @since   11.1
 	 */
-	public static function treerecurse($id, $indent, $list, &$children, $maxlevel = 9999, $level = 0, $type = 1)
+	public static function treerecurse($id, $indent, array $list, array &$children, $maxlevel = 9999, $level = 0, $type = 1)
 	{
 		if (@$children[$id] && $level <= $maxlevel)
 		{

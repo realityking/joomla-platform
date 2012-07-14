@@ -31,7 +31,7 @@ class JDocumentRendererHead extends JDocumentRenderer
 	 *
 	 * @note    Unused arguments are retained to preserve backward compatibility.
 	 */
-	public function render($head, $params = array(), $content = null)
+	public function render($head, array $params = array(), $content = null)
 	{
 		ob_start();
 		echo $this->fetchHead($this->_doc);
@@ -50,7 +50,7 @@ class JDocumentRendererHead extends JDocumentRenderer
 	 *
 	 * @since   11.1
 	 */
-	public function fetchHead($document)
+	public function fetchHead(JDocument $document)
 	{
 		// Trigger the onBeforeCompileHead event (skip for installation, since it causes an error)
 		$app = JFactory::getApplication();

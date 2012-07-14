@@ -91,7 +91,7 @@ abstract class JTable extends JObject
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($table, $key, $db)
+	public function __construct($table, $key, JDatabaseDriver $db)
 	{
 		// Set internal variables.
 		$this->_tbl = $table;
@@ -167,7 +167,7 @@ abstract class JTable extends JObject
 	 * @link    http://docs.joomla.org/JTable/getInstance
 	 * @since   11.1
 	 */
-	public static function getInstance($type, $prefix = 'JTable', $config = array())
+	public static function getInstance($type, $prefix = 'JTable', array $config = array())
 	{
 		// Sanitize and prepare the table class name.
 		$type = preg_replace('/[^A-Z0-9_\.-]/i', '', $type);

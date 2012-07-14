@@ -27,7 +27,7 @@ class JObject
 	 * @var    array
 	 * @since  11.1
 	 * @see     JError
-	 * @deprecated 12.3  JError has been deprecated
+	 * @deprecated 13.3  JError has been deprecated
 	 */
 	protected $_errors = array();
 
@@ -53,7 +53,7 @@ class JObject
 	 * @return  string  The classname.
 	 *
 	 * @since   11.1
-	 * @deprecated 12.3  Classes should provide their own __toString() implementation.
+	 * @deprecated 13.3  Classes should provide their own __toString() implementation.
 	 */
 	public function __toString()
 	{
@@ -135,7 +135,7 @@ class JObject
 	 *
 	 * @since   11.1
 	 * @see     JError
-	 * @deprecated 12.3  JError has been deprecated
+	 * @deprecated 13.3  JError has been deprecated
 	 */
 	public function getError($i = null, $toString = true)
 	{
@@ -171,7 +171,7 @@ class JObject
 	 *
 	 * @since   11.1
 	 * @see     JError
-	 * @deprecated 12.3  JError has been deprecated
+	 * @deprecated 13.3  JError has been deprecated
 	 */
 	public function getErrors()
 	{
@@ -230,7 +230,7 @@ class JObject
 	 *
 	 * @since   11.1
 	 * @see     JError
-	 * @deprecated 12.3  JError has been deprecated
+	 * @deprecated 13.3  JError has been deprecated
 	 */
 	public function setError($error)
 	{

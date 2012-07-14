@@ -68,7 +68,7 @@ class JControllerForm extends JControllerLegacy
 	 * @since   12.2
 	 * @throws  Exception
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		parent::__construct($config);
 
@@ -188,7 +188,7 @@ class JControllerForm extends JControllerLegacy
 	 *
 	 * @since   12.2
 	 */
-	protected function allowAdd($data = array())
+	protected function allowAdd(array $data = array())
 	{
 		$user = JFactory::getUser();
 		return ($user->authorise('core.create', $this->option) || count($user->getAuthorisedCategories($this->option, 'core.create')));
@@ -223,7 +223,7 @@ class JControllerForm extends JControllerLegacy
 	 *
 	 * @since   12.2
 	 */
-	protected function allowSave($data, $key = 'id')
+	protected function allowSave(array $data, $key = 'id')
 	{
 		$recordId = isset($data[$key]) ? $data[$key] : '0';
 
@@ -246,7 +246,7 @@ class JControllerForm extends JControllerLegacy
 	 *
 	 * @since	12.2
 	 */
-	public function batch($model)
+	public function batch(JModelLegacy $model)
 	{
 		$vars = $this->input->post->get('batch', array(), 'array');
 		$cid  = $this->input->post->get('cid', array(), 'array');
@@ -366,7 +366,7 @@ class JControllerForm extends JControllerLegacy
 	 *
 	 * @param   string  $key     The name of the primary key of the URL variable.
 	 * @param   string  $urlVar  The name of the URL variable if different from the primary key
-	 * (sometimes required to avoid router collisions).
+	 *                           (sometimes required to avoid router collisions).
 	 *
 	 * @return  boolean  True if access level check and checkout passes, false otherwise.
 	 *
@@ -456,7 +456,7 @@ class JControllerForm extends JControllerLegacy
 	 *
 	 * @since   12.2
 	 */
-	public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
+	public function getModel($name = '', $prefix = '', array $config = array('ignore_request' => true))
 	{
 		if (empty($name))
 		{
@@ -533,7 +533,7 @@ class JControllerForm extends JControllerLegacy
 	 *
 	 * @since   12.2
 	 */
-	protected function postSaveHook(JModelLegacy $model, $validData = array())
+	protected function postSaveHook(JModelLegacy $model, array $validData = array())
 	{
 	}
 

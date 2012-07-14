@@ -1936,13 +1936,13 @@ class JForm
 	 *                            already exists with the same group/name.
 	 * @param   string  $xpath    An optional xpath to search for the fields.
 	 *
-	 * @return  object  JForm instance.
+	 * @return  JForm   Instance of this class.
 	 *
 	 * @since   11.1
 	 * @throws  InvalidArgumentException if no data provided.
 	 * @throws  RuntimeException if the form could not be loaded.
 	 */
-	public static function getInstance($name, $data = null, $options = array(), $replace = true, $xpath = false)
+	public static function getInstance($name, $data = null, array $options = array(), $replace = true, $xpath = false)
 	{
 		// Reference to array with form instances
 		$forms = &self::$forms;

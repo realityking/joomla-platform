@@ -34,7 +34,7 @@ abstract class JHtmlRules
 	 * @see     JAccess
 	 * @see     JFormFieldRules
 	 */
-	public static function assetFormWidget($actions, $assetId = null, $parent = null, $control = 'jform[rules]', $idPrefix = 'jform_rules')
+	public static function assetFormWidget(array $actions, $assetId = null, $parent = null, $control = 'jform[rules]', $idPrefix = 'jform_rules')
 	{
 		$images = self::_getImagesArray();
 

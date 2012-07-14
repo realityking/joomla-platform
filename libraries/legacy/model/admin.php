@@ -776,7 +776,7 @@ abstract class JModelAdmin extends JModelForm
 	 *
 	 * @since   12.2
 	 */
-	protected function getReorderConditions($table)
+	protected function getReorderConditions(JTable $table)
 	{
 		return array();
 	}
@@ -811,7 +811,7 @@ abstract class JModelAdmin extends JModelForm
 	 *
 	 * @since   12.2
 	 */
-	protected function prepareTable($table)
+	protected function prepareTable(JTable $table)
 	{
 		// Derived class will provide its own implementation if required.
 	}
@@ -958,7 +958,7 @@ abstract class JModelAdmin extends JModelForm
 	 *
 	 * @since   12.2
 	 */
-	public function save($data)
+	public function save(array $data)
 	{
 		$dispatcher = JEventDispatcher::getInstance();
 		$table = $this->getTable();
@@ -1045,7 +1045,7 @@ abstract class JModelAdmin extends JModelForm
 	 *
 	 * @since   12.2
 	 */
-	public function saveorder($pks = null, $order = null)
+	public function saveorder(array $pks = null, $order = null)
 	{
 		$table = $this->getTable();
 		$conditions = array();

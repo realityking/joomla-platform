@@ -60,9 +60,9 @@ class JGrid
 	 *
 	 * @param   array  $options  Associative array of attributes for the table-tag
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		$this->setTableOptions($options, true);
 	}
@@ -72,7 +72,7 @@ class JGrid
 	 *
 	 * @return  string
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function __toString()
 	{
@@ -87,9 +87,9 @@ class JGrid
 	 *
 	 * @return  JGrid This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
-	public function setTableOptions($options = array(), $replace = false)
+	public function setTableOptions(array $options = array(), $replace = false)
 	{
 		if ($replace)
 		{
@@ -107,7 +107,7 @@ class JGrid
 	 *
 	 * @return  array Associative array of attributes
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function getTableOptions()
 	{
@@ -121,7 +121,7 @@ class JGrid
 	 *
 	 * @return  JGrid This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function addColumn($name)
 	{
@@ -133,9 +133,9 @@ class JGrid
 	/**
 	 * Returns the list of internal columns
 	 *
-	 * @return  array List of internal columns
+	 * @return  array  List of internal columns
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function getColumns()
 	{
@@ -147,9 +147,9 @@ class JGrid
 	 *
 	 * @param   string  $name  Name of the column to be deleted
 	 *
-	 * @return  JGrid This object for chaining
+	 * @return  JGrid  This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function deleteColumn($name)
 	{
@@ -169,9 +169,9 @@ class JGrid
 	 *
 	 * @param   array  $columns  List of internal column names
 	 *
-	 * @return  JGrid This object for chaining
+	 * @return  JGrid  This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function setColumns($columns)
 	{
@@ -187,11 +187,11 @@ class JGrid
 	 * @param   array  $options  Associative array of attributes for the row
 	 * @param   int    $special  1 for a new row in the header, 2 for a new row in the footer
 	 *
-	 * @return  JGrid This object for chaining
+	 * @return  JGrid  This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
-	public function addRow($options = array(), $special = false)
+	public function addRow(array $options = array(), $special = false)
 	{
 		$this->rows[]['_row'] = $options;
 		$this->activeRow = count($this->rows) - 1;
@@ -213,9 +213,9 @@ class JGrid
 	/**
 	 * Method to get the attributes of the currently active row
 	 *
-	 * @return array Associative array of attributes
+	 * @return  array  Associative array of attributes
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function getRowOptions()
 	{
@@ -227,11 +227,11 @@ class JGrid
 	 *
 	 * @param   array  $options  Associative array of attributes
 	 *
-	 * @return JGrid This object for chaining
+	 * @return  JGrid  This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
-	public function setRowOptions($options)
+	public function setRowOptions(array $options)
 	{
 		$this->rows[$this->activeRow]['_row'] = $options;
 
@@ -241,9 +241,9 @@ class JGrid
 	/**
 	 * Get the currently active row ID
 	 *
-	 * @return  int ID of the currently active row
+	 * @return  int  ID of the currently active row
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function getActiveRow()
 	{
@@ -255,9 +255,9 @@ class JGrid
 	 *
 	 * @param   int  $id  ID of the row to be set to current
 	 *
-	 * @return  JGrid This object for chaining
+	 * @return  JGrid  This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function setActiveRow($id)
 	{
@@ -274,11 +274,11 @@ class JGrid
 	 * @param   array   $option   Associative array of attributes for the td-element
 	 * @param   bool    $replace  If false, the content is appended to the current content of the cell
 	 *
-	 * @return  JGrid This object for chaining
+	 * @return  JGrid  This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
-	public function setRowCell($name, $content, $option = array(), $replace = true)
+	public function setRowCell($name, $content, array $option = array(), $replace = true)
 	{
 		if ($replace || !isset($this->rows[$this->activeRow][$name]))
 		{
@@ -301,9 +301,9 @@ class JGrid
 	 *
 	 * @param   int  $id  ID of the row to return
 	 *
-	 * @return  array Array of columns of a table row
+	 * @return  array  Array of columns of a table row
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function getRow($id = false)
 	{
@@ -327,9 +327,9 @@ class JGrid
 	 *
 	 * @param   int  $special  false for the standard rows, 1 for the header rows, 2 for the footer rows
 	 *
-	 * @return  array Array of IDs
+	 * @return  array  Array of IDs
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function getRows($special = false)
 	{
@@ -352,9 +352,9 @@ class JGrid
 	 *
 	 * @param   int  $id  ID of the row to be deleted
 	 *
-	 * @return  JGrid This object for chaining
+	 * @return  JGrid  This object for chaining
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function deleteRow($id)
 	{
@@ -382,9 +382,9 @@ class JGrid
 	/**
 	 * Render the HTML table
 	 *
-	 * @return  string The rendered HTML table
+	 * @return  string  The rendered HTML table
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
 	public function toString()
 	{
@@ -418,11 +418,11 @@ class JGrid
 	 * @param   string  $area  Name of the area to render. Valid: tbody, tfoot, thead
 	 * @param   string  $cell  Name of the cell to render. Valid: td, th
 	 *
-	 * @return string The rendered table area
+	 * @return  string  The rendered table area
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
-	protected function renderArea($ids, $area = 'tbody', $cell = 'td')
+	protected function renderArea(array $ids, $area = 'tbody', $cell = 'td')
 	{
 		$output = array();
 		$output[] = '<' . $area . ">\n";
@@ -452,9 +452,9 @@ class JGrid
 	 *
 	 * @return  string The HTML attribute string
 	 *
-	 * @since 11.3
+	 * @since   11.3
 	 */
-	protected function renderAttributes($attributes)
+	protected function renderAttributes(array $attributes)
 	{
 		if (count((array) $attributes) == 0)
 		{

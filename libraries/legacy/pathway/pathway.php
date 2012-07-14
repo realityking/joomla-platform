@@ -60,7 +60,7 @@ class JPathway
 	 * @since   11.1
 	 * @throws  RuntimeException
 	 */
-	public static function getInstance($client, $options = array())
+	public static function getInstance($client, array $options = array())
 	{
 		if (empty(self::$instances[$client]))
 		{
@@ -121,12 +121,12 @@ class JPathway
 	 *
 	 * @since   11.1
 	 */
-	public function setPathway($pathway)
+	public function setPathway(array $pathway)
 	{
 		$oldPathway = $this->_pathway;
 
 		// Set the new pathway.
-		$this->_pathway = array_values((array) $pathway);
+		$this->_pathway = array_values($pathway);
 
 		return array_values($oldPathway);
 	}

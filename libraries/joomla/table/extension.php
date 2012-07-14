@@ -26,7 +26,7 @@ class JTableExtension extends JTable
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($db)
+	public function __construct(JDatabaseDriver $db)
 	{
 		parent::__construct('#__extensions', 'extension_id', $db);
 	}
@@ -55,14 +55,14 @@ class JTableExtension extends JTable
 	 *
 	 * @param   array  $array   Named array
 	 * @param   mixed  $ignore  An optional array or space separated list of properties
-	 * to ignore while binding.
+	 *                          to ignore while binding.
 	 *
 	 * @return  mixed  Null if operation was satisfactory, otherwise returns an error
 	 *
 	 * @see     JTable::bind
 	 * @since   11.1
 	 */
-	public function bind($array, $ignore = '')
+	public function bind(array $array, $ignore = '')
 	{
 		if (isset($array['params']) && is_array($array['params']))
 		{
@@ -90,7 +90,7 @@ class JTableExtension extends JTable
 	 *
 	 * @since   11.1
 	 */
-	public function find($options = array())
+	public function find(array $options = array())
 	{
 		// Get the JDatabaseQuery object
 		$query = $this->_db->getQuery(true);

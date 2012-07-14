@@ -810,7 +810,7 @@ class JInstaller extends JAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function parseQueries($element)
+	public function parseQueries(SimpleXMLElement $element)
 	{
 		// Get the database connector object
 		$db = & $this->_db;
@@ -946,7 +946,7 @@ class JInstaller extends JAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function setSchemaVersion($schema, $eid)
+	public function setSchemaVersion(SimpleXMLElement $schema, $eid)
 	{
 		if ($eid && $schema)
 		{
@@ -1014,7 +1014,7 @@ class JInstaller extends JAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function parseSchemaUpdates($schema, $eid)
+	public function parseSchemaUpdates(SimpleXMLElement $schema, $eid)
 	{
 		$files = array();
 		$update_count = 0;
@@ -1146,7 +1146,7 @@ class JInstaller extends JAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function parseFiles($element, $cid = 0, $oldFiles = null, $oldMD5 = null)
+	public function parseFiles(SimpleXMLElement $element, $cid = 0, $oldFiles = null, $oldMD5 = null)
 	{
 		// Get the array of file nodes to process; we checked whether this had children above.
 		if (!$element || !count($element->children()))
@@ -1271,7 +1271,7 @@ class JInstaller extends JAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function parseLanguages($element, $cid = 0)
+	public function parseLanguages(SimpleXMLElement $element, $cid = 0)
 	{
 		// TODO: work out why the below line triggers 'node no longer exists' errors with files
 		if (!$element || !count($element->children()))
@@ -1387,7 +1387,7 @@ class JInstaller extends JAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function parseMedia($element, $cid = 0)
+	public function parseMedia(SimpleXMLElement $element, $cid = 0)
 	{
 		if (!$element || !count($element->children()))
 		{
@@ -1521,11 +1521,11 @@ class JInstaller extends JAdapter
 	 * @param   array    $files      Array with filenames
 	 * @param   boolean  $overwrite  True if existing files can be replaced
 	 *
-	 * @return  boolean  True on success
+	 * @return  mixed  No. of files on success, false on failute
 	 *
 	 * @since   11.1
 	 */
-	public function copyFiles($files, $overwrite = null)
+	public function copyFiles(array $files, $overwrite = null)
 	{
 		/*
 		 * To allow for manual override on the overwriting flag, we check to see if
@@ -1542,9 +1542,8 @@ class JInstaller extends JAdapter
 		 * $files must be an array of filenames.  Verify that it is an array with
 		 * at least one file to copy.
 		 */
-		if (is_array($files) && count($files) > 0)
+		if (count($files) > 0)
 		{
-
 			foreach ($files as $file)
 			{
 				// Get the source and destination paths
@@ -1615,7 +1614,7 @@ class JInstaller extends JAdapter
 		}
 		else
 		{
-			// The $files variable was either not an array or an empty array
+			// The $files variable was an empty array
 			return false;
 		}
 
@@ -1954,7 +1953,7 @@ class JInstaller extends JAdapter
 	 *
 	 * @since   11.1
 	 */
-	public function findDeletedFiles($old_files, $new_files)
+	public function findDeletedFiles(array $old_files, array $new_files)
 	{
 		// The magic find deleted files function!
 		// The files that are new

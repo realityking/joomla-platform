@@ -70,7 +70,6 @@ class JUpdater extends JAdapter
 	 */
 	public function findUpdates($eid = 0, $cacheTimeout = 0)
 	{
-
 		$dbo = $this->getDBO();
 		$retval = false;
 

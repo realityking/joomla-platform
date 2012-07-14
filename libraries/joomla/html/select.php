@@ -44,7 +44,7 @@ abstract class JHtmlSelect
 	 * @since   11.1
 	 * @see     JFormFieldRadio
 	 */
-	public static function booleanlist($name, $attribs = null, $selected = null, $yes = 'JYES', $no = 'JNO', $id = false)
+	public static function booleanlist($name, array $attribs = null, $selected = null, $yes = 'JYES', $no = 'JNO', $id = false)
 	{
 		$arr = array(JHtml::_('select.option', '0', JText::_($no)), JHtml::_('select.option', '1', JText::_($yes)));
 		return JHtml::_('select.radiolist', $arr, $name, $attribs, 'value', 'text', (int) $selected, $id);
@@ -77,7 +77,7 @@ abstract class JHtmlSelect
 	 *
 	 * @since   11.1
 	 */
-	public static function genericlist($data, $name, $attribs = null, $optKey = 'value', $optText = 'text', $selected = null, $idtag = false,
+	public static function genericlist(array $data, $name, $attribs = null, $optKey = 'value', $optText = 'text', $selected = null, $idtag = false,
 		$translate = false)
 	{
 		// Set default options
@@ -155,7 +155,7 @@ abstract class JHtmlSelect
 	 *
 	 * @throws  RuntimeException If a group has contents that cannot be processed.
 	 */
-	public static function groupedlist($data, $name, $options = array())
+	public static function groupedlist(array $data, $name, $options = array())
 	{
 		// Set default options and overwrite with anything passed in
 		$options = array_merge(
@@ -476,7 +476,7 @@ abstract class JHtmlSelect
 	 *
 	 * @since   11.1
 	 */
-	public static function options($arr, $optKey = 'value', $optText = 'text', $selected = null, $translate = false)
+	public static function options(array $arr, $optKey = 'value', $optText = 'text', $selected = null, $translate = false)
 	{
 		$options = array_merge(
 			JHtml::$formatOptions,
@@ -651,7 +651,7 @@ abstract class JHtmlSelect
 	 *
 	 * @since  11.1
 	 */
-	public static function radiolist($data, $name, $attribs = null, $optKey = 'value', $optText = 'text', $selected = null, $idtag = false,
+	public static function radiolist(array $data, $name, $attribs = null, $optKey = 'value', $optText = 'text', $selected = null, $idtag = false,
 		$translate = false)
 	{
 		reset($data);

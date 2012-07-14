@@ -28,7 +28,7 @@ abstract class JHtmlTabs
 	 *
 	 * @since   11.1
 	 */
-	public static function start($group = 'tabs', $params = array())
+	public static function start($group = 'tabs', array $params = array())
 	{
 		self::_loadBehavior($group, $params);
 
@@ -72,7 +72,7 @@ abstract class JHtmlTabs
 	 *
 	 * @since   11.1
 	 */
-	protected static function _loadBehavior($group, $params = array())
+	protected static function _loadBehavior($group, array $params = array())
 	{
 		static $loaded = array();
 

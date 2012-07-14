@@ -28,7 +28,7 @@ class JSessionStorageDatabase extends JSessionStorage
 	 *
 	 * @since   11.1
 	 */
-	public function read($id)
+	public function read(array $id)
 	{
 		// Get the database connection object and verify its connected.
 		$db = JFactory::getDbo();

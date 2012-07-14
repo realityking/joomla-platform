@@ -33,7 +33,7 @@ class JTableUser extends JTable
 	 *
 	 * @since  11.1
 	 */
-	public function __construct($db)
+	public function __construct(JDatabaseDriver $db)
 	{
 		parent::__construct('#__users', 'id', $db);
 
@@ -119,7 +119,7 @@ class JTableUser extends JTable
 	 *
 	 * @since   11.1
 	 */
-	public function bind($array, $ignore = '')
+	public function bind(array $array, $ignore = '')
 	{
 		if (array_key_exists('params', $array) && is_array($array['params']))
 		{

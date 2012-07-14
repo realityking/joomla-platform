@@ -88,11 +88,11 @@ class JApplication extends JApplicationBase
 	 * Class constructor.
 	 *
 	 * @param   array  $config  A configuration array including optional elements such as session
-	 * session_name, clientId and others. This is not exhaustive.
+	 *                          session_name, clientId and others. This is not exhaustive.
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		// Set the view name.
 		$this->_name = $this->getName();
@@ -158,7 +158,7 @@ class JApplication extends JApplicationBase
 	 *
 	 * @since   11.1
 	 */
-	public static function getInstance($client, $config = array(), $prefix = 'J')
+	public static function getInstance($client, array $config = array(), $prefix = 'J')
 	{
 		if (empty(self::$instances[$client]))
 		{
@@ -195,7 +195,7 @@ class JApplication extends JApplicationBase
 	 *
 	 * @since   11.1
 	 */
-	public function initialise($options = array())
+	public function initialise(array $options = array())
 	{
 		// Set the language in the class.
 		$config = JFactory::getConfig();
@@ -603,9 +603,8 @@ class JApplication extends JApplicationBase
 	 *
 	 * @since   11.1
 	 */
-	public function login($credentials, $options = array())
+	public function login(array $credentials, array $options = array())
 	{
-		// Get the global JAuthentication object.
 		jimport('joomla.user.authentication');
 
 		$authenticate = JAuthentication::getInstance();
@@ -718,7 +717,7 @@ class JApplication extends JApplicationBase
 	 *
 	 * @since   11.1
 	 */
-	public function logout($userid = null, $options = array())
+	public function logout($userid = null, array $options = array())
 	{
 		// Get a user object from the JApplication.
 		$user = JFactory::getUser($userid);
@@ -766,7 +765,7 @@ class JApplication extends JApplicationBase
 	 *
 	 * @since   11.1
 	 */
-	public function getTemplate($params = array())
+	public function getTemplate(array $params = array())
 	{
 		return 'system';
 	}
@@ -838,7 +837,7 @@ class JApplication extends JApplicationBase
 	 *
 	 * @since   11.1
 	 */
-	public function getPathway($name = null, $options = array())
+	public function getPathway($name = null, array $options = array())
 	{
 		if (!isset($name))
 		{
@@ -867,7 +866,7 @@ class JApplication extends JApplicationBase
 	 *
 	 * @since   11.1
 	 */
-	public function getMenu($name = null, $options = array())
+	public function getMenu($name = null, array $options = array())
 	{
 		if (!isset($name))
 		{

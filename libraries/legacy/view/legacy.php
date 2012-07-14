@@ -119,7 +119,7 @@ class JViewLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		// Set the view name
 		if (empty($this->_name))
@@ -485,7 +485,7 @@ class JViewLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	public function setModel($model, $default = false)
+	public function setModel(JModelLegacy $model, $default = false)
 	{
 		$name = strtolower($model->getName());
 		$this->_models[$name] = $model;
@@ -778,7 +778,7 @@ class JViewLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	protected function _createFileName($type, $parts = array())
+	protected function _createFileName($type, array $parts = array())
 	{
 		$filename = '';
 

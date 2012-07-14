@@ -37,7 +37,7 @@ class JCache
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		$conf = JFactory::getConfig();
 
@@ -77,7 +77,7 @@ class JCache
 	 *
 	 * @since   11.1
 	 */
-	public static function getInstance($type = 'output', $options = array())
+	public static function getInstance($type = 'output', array $options = array())
 	{
 		return JCacheController::getInstance($type, $options);
 	}
@@ -433,7 +433,7 @@ class JCache
 	/**
 	 * Get the cache storage handler
 	 *
-	 * @return  JCacheStorage   A JCacheStorage object
+	 * @return  JCacheStorage  A JCacheStorage object
 	 *
 	 * @since   11.1
 	 */
@@ -460,7 +460,7 @@ class JCache
 	 *
 	 * @since   11.1
 	 */
-	public static function getWorkarounds($data, $options = array())
+	public static function getWorkarounds($data, array$options = array())
 	{
 		$app = JFactory::getApplication();
 		$document = JFactory::getDocument();
@@ -520,7 +520,7 @@ class JCache
 	 *
 	 * @since   11.1
 	 */
-	public static function setWorkarounds($data, $options = array())
+	public static function setWorkarounds($data, array $options = array())
 	{
 		$loptions = array();
 		$loptions['nopathway'] = 0;

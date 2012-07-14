@@ -54,7 +54,7 @@ class JControllerAdmin extends JControllerLegacy
 	 * @since   12.2
 	 * @throws  Exception
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		parent::__construct($config);
 
@@ -150,7 +150,7 @@ class JControllerAdmin extends JControllerLegacy
 	 *
 	 * @since   12.2
 	 */
-	public function display($cachable = false, $urlparams = array())
+	public function display($cachable = false, array $urlparams = array())
 	{
 		return $this;
 	}

@@ -227,7 +227,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 	 *
 	 * @since   11.1
 	 */
-	public static function getInstance($options = array())
+	public static function getInstance(array $options = array())
 	{
 		// Sanitize the database connector options.
 		$options['driver']   = (isset($options['driver'])) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
@@ -359,7 +359,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		// Initialise object variables.
 		$this->_database = (isset($options['database'])) ? $options['database'] : '';
@@ -914,7 +914,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 	 *
 	 * @param   string  $key     The name of a field on which to key the result array.
 	 * @param   string  $column  An optional column name. Instead of the whole row, only this column value will be in
-	 * the result array.
+	 *                           the result array.
 	 *
 	 * @return  mixed   The return value or null if the query failed.
 	 *

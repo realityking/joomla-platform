@@ -25,7 +25,7 @@ class JTableMenu extends JTableNested
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($db)
+	public function __construct(JDatabaseDriver $db)
 	{
 		parent::__construct('#__menu', 'id', $db);
 
@@ -44,7 +44,7 @@ class JTableMenu extends JTableNested
 	 * @see     JTable::bind
 	 * @since   11.1
 	 */
-	public function bind($array, $ignore = '')
+	public function bind(array $array, $ignore = '')
 	{
 		// Verify that the default home menu is not unset
 		if ($this->home == '1' && $this->language == '*' && ($array['home'] == '0'))

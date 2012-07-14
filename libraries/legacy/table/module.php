@@ -25,7 +25,7 @@ class JTableModule extends JTable
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($db)
+	public function __construct(JDatabaseDriver, $db)
 	{
 		parent::__construct('#__modules', 'id', $db);
 
@@ -72,7 +72,7 @@ class JTableModule extends JTable
 	 * @see     JTable::bind
 	 * @since   11.1
 	 */
-	public function bind($array, $ignore = '')
+	public function bind(array $array, $ignore = '')
 	{
 		if (isset($array['params']) && is_array($array['params']))
 		{

@@ -94,7 +94,7 @@ class JRouter
 	 *
 	 * @since 11.1
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		if (array_key_exists('mode', $options))
 		{
@@ -118,7 +118,7 @@ class JRouter
 	 * @since   11.1
 	 * @throws  RuntimeException
 	 */
-	public static function getInstance($client, $options = array())
+	public static function getInstance($client, array $options = array())
 	{
 		if (empty(self::$instances[$client]))
 		{
@@ -158,13 +158,13 @@ class JRouter
 	/**
 	 * Function to convert a route to an internal URI
 	 *
-	 * @param   JURI  $uri  The uri.
+	 * @param   JUri  $uri  The uri.
 	 *
 	 * @return  array
 	 *
 	 * @since   11.1
 	 */
-	public function parse($uri)
+	public function parse(JUri $uri)
 	{
 		$vars = array();
 
@@ -273,7 +273,7 @@ class JRouter
 	 *
 	 * @since   11.1
 	 */
-	public function setVars($vars = array(), $merge = true)
+	public function setVars(array $vars = array(), $merge = true)
 	{
 		if ($merge)
 		{
@@ -319,7 +319,7 @@ class JRouter
 	/**
 	 * Attach a build rule
 	 *
-	 * @param   callback  $callback  The function to be called
+	 * @param   callable  $callback  The function to be called
 	 *
 	 * @return  void
 	 *
@@ -333,7 +333,7 @@ class JRouter
 	/**
 	 * Attach a parse rule
 	 *
-	 * @param   callback  $callback  The function to be called.
+	 * @param   callable  $callback  The function to be called.
 	 *
 	 * @return  void
 	 *
@@ -347,13 +347,13 @@ class JRouter
 	/**
 	 * Function to convert a raw route to an internal URI
 	 *
-	 * @param   JURI  $uri  The raw route
+	 * @param   JUri  $uri  The raw route
 	 *
 	 * @return  boolean
 	 *
 	 * @since   11.1
 	 */
-	protected function _parseRawRoute($uri)
+	protected function _parseRawRoute(JUri $uri)
 	{
 		return false;
 	}
@@ -361,13 +361,13 @@ class JRouter
 	/**
 	 * Function to convert a sef route to an internal URI
 	 *
-	 * @param   JURI  $uri  The sef URI
+	 * @param   JUri  $uri  The sef URI
 	 *
 	 * @return  string  Internal URI
 	 *
 	 * @since   11.1
 	 */
-	protected function _parseSefRoute($uri)
+	protected function _parseSefRoute(JUri $uri)
 	{
 		return false;
 	}
@@ -375,39 +375,39 @@ class JRouter
 	/**
 	 * Function to build a raw route
 	 *
-	 * @param   JURI  $uri  The internal URL
+	 * @param   JUri  $uri  The internal URL
 	 *
 	 * @return  string  Raw Route
 	 *
 	 * @since   11.1
 	 */
-	protected function _buildRawRoute($uri)
+	protected function _buildRawRoute(JUri $uri)
 	{
 	}
 
 	/**
 	 * Function to build a sef route
 	 *
-	 * @param   JURI  $uri  The uri
+	 * @param   JUri  $uri  The uri
 	 *
 	 * @return  string  The SEF route
 	 *
 	 * @since   11.1
 	 */
-	protected function _buildSefRoute($uri)
+	protected function _buildSefRoute(JUri $uri)
 	{
 	}
 
 	/**
 	 * Process the parsed router variables based on custom defined rules
 	 *
-	 * @param   JURI  $uri  The URI to parse
+	 * @param   JUri  $uri  The URI to parse
 	 *
 	 * @return  array  The array of processed URI variables
 	 *
 	 * @since   11.1
 	 */
-	protected function _processParseRules($uri)
+	protected function _processParseRules(JUri $uri)
 	{
 		$vars = array();
 
@@ -422,13 +422,13 @@ class JRouter
 	/**
 	 * Process the build uri query data based on custom defined rules
 	 *
-	 * @param   JURI  $uri  The URI
+	 * @param   JUri  $uri  The URI
 	 *
 	 * @return  void
 	 *
 	 * @since   11.1
 	 */
-	protected function _processBuildRules($uri)
+	protected function _processBuildRules(JUri $uri)
 	{
 		foreach ($this->_rules['build'] as $rule)
 		{
@@ -441,7 +441,7 @@ class JRouter
 	 *
 	 * @param   string  $url  The URI
 	 *
-	 * @return  JURI
+	 * @return  JUri
 	 *
 	 * @since   11.1
 	 */
@@ -472,7 +472,7 @@ class JRouter
 		}
 
 		// Decompose link into url component parts
-		return new JURI($url);
+		return new JUri($url);
 	}
 
 	/**
@@ -484,7 +484,7 @@ class JRouter
 	 *
 	 * @since   11.1
 	 */
-	protected function _encodeSegments($segments)
+	protected function _encodeSegments(array $segments)
 	{
 		$total = count($segments);
 		for ($i = 0; $i < $total; $i++)
@@ -504,7 +504,7 @@ class JRouter
 	 *
 	 * @since 11.1
 	 */
-	protected function _decodeSegments($segments)
+	protected function _decodeSegments(array $segments)
 	{
 		$total = count($segments);
 		for ($i = 0; $i < $total; $i++)

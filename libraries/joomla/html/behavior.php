@@ -209,7 +209,7 @@ abstract class JHtmlBehavior
 	 *
 	 * @since   11.1
 	 */
-	public static function tooltip($selector = '.hasTip', $params = array())
+	public static function tooltip($selector = '.hasTip', array $params = array())
 	{
 		$sig = md5(serialize(array($selector, $params)));
 		if (isset(self::$loaded[__METHOD__][$sig]))
@@ -276,7 +276,7 @@ abstract class JHtmlBehavior
 	 *
 	 * @since   11.1
 	 */
-	public static function modal($selector = 'a.modal', $params = array())
+	public static function modal($selector = 'a.modal', array $params = array())
 	{
 		$document = JFactory::getDocument();
 
@@ -387,7 +387,7 @@ abstract class JHtmlBehavior
 	 *
 	 * @since   11.1
 	 */
-	public static function uploader($id = 'file-upload', $params = array(), $upload_queue = 'upload-queue')
+	public static function uploader($id = 'file-upload', array $params = array(), $upload_queue = 'upload-queue')
 	{
 		// Include MooTools framework
 		self::framework();
@@ -553,7 +553,7 @@ abstract class JHtmlBehavior
 	 *
 	 * @since   11.1
 	 */
-	public static function tree($id, $params = array(), $root = array())
+	public static function tree($id, array $params = array(), array $root = array())
 	{
 		// Include MooTools framework
 		self::framework();
@@ -820,7 +820,7 @@ abstract class JHtmlBehavior
 	 * @since   11.1
 	 * @dprecated  13.3 Use JHtml::getJSObject() instead.
 	 */
-	protected static function _getJSObject($array = array())
+	protected static function _getJSObject(array $array = array())
 	{
 		JLog::add('JHtmlBehavior::_getJSObject() is deprecated. JHtml::getJSObject() instead..', JLog::WARNING, 'deprecated');
 

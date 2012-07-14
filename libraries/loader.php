@@ -314,7 +314,7 @@ abstract class JLoader
 	 *
 	 * @since   12.1
 	 */
-	private static function _load($class, $lookup)
+	private static function _load($class, array $lookup)
 	{
 		// Split the class name into parts separated by camelCase.
 		$parts = preg_split('/(?<=[a-z0-9])(?=[A-Z])/x', $class);

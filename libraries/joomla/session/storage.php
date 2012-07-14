@@ -33,7 +33,7 @@ abstract class JSessionStorage
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		$this->register($options);
 	}
@@ -48,7 +48,7 @@ abstract class JSessionStorage
 	 *
 	 * @since   11.1
 	 */
-	public static function getInstance($name = 'none', $options = array())
+	public static function getInstance($name = 'none', array $options = array())
 	{
 		$name = strtolower(JFilterInput::getInstance()->clean($name, 'word'));
 

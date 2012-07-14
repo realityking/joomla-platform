@@ -97,7 +97,7 @@ class JCategories
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		$this->_extension = $options['extension'];
 		$this->_table = $options['table'];
@@ -121,7 +121,7 @@ class JCategories
 	 *
 	 * @since   11.1
 	 */
-	public static function getInstance($extension, $options = array())
+	public static function getInstance($extension, array $options = array())
 	{
 		$hash = md5($extension . serialize($options));
 
@@ -665,7 +665,7 @@ class JCategoryNode extends JObject
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($category = null, $constructor = null)
+	public function __construct($category = null, JCategoryNode $constructor = null)
 	{
 		if ($category)
 		{
@@ -738,12 +738,9 @@ class JCategoryNode extends JObject
 	 *
 	 * @since   11.1
 	 */
-	public function addChild($child)
+	public function addChild(JCategoryNode $child)
 	{
-		if ($child instanceof JCategoryNode)
-		{
-			$child->setParent($this);
-		}
+		$child->setParent($this);
 	}
 
 	/**
@@ -844,7 +841,7 @@ class JCategoryNode extends JObject
 	 *
 	 * @since   11.1
 	 */
-	public function setSibling($sibling, $right = true)
+	public function setSibling(JCategoryNode $sibling, $right = true)
 	{
 		if ($right)
 		{

@@ -136,7 +136,7 @@ class JFilterInput
 	 *
 	 * @since   11.1
 	 */
-	public static function &getInstance($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
+	public static function getInstance($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
 	{
 		$sig = md5(serialize(array($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto)));
 
@@ -271,7 +271,7 @@ class JFilterInput
 	 *
 	 * @since   11.1
 	 */
-	public static function checkAttribute($attrSubSet)
+	public static function checkAttribute(array $attrSubSet)
 	{
 		$attrSubSet[0] = strtolower($attrSubSet[0]);
 		$attrSubSet[1] = strtolower($attrSubSet[1]);
@@ -539,7 +539,7 @@ class JFilterInput
 	 *
 	 * @since   11.1
 	 */
-	protected function _cleanAttributes($attrSet)
+	protected function _cleanAttributes(array $attrSet)
 	{
 		$newSet = array();
 

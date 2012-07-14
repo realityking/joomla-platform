@@ -174,7 +174,7 @@ class JUpdate extends JObject
 	 * @note    This is public because it is called externally
 	 * @since   11.1
 	 */
-	public function _startElement($parser, $name, $attrs = array())
+	public function _startElement($parser, $name, array $attrs = array())
 	{
 		array_push($this->stack, $name);
 		$tag = $this->_getStackLocation();

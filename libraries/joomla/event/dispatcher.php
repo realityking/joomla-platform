@@ -127,7 +127,7 @@ class JEventDispatcher extends JObject
 	 *
 	 * @since   11.1
 	 */
-	public function trigger($event, $args = array())
+	public function trigger($event, array $args = array())
 	{
 		$result = array();
 

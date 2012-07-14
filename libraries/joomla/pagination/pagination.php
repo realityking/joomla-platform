@@ -548,7 +548,7 @@ class JPagination
 	 *
 	 * @since   11.1
 	 */
-	protected function _list_footer($list)
+	protected function _list_footer(array $list)
 	{
 		$html = "<div class=\"list-footer\">\n";
 
@@ -571,7 +571,7 @@ class JPagination
 	 *
 	 * @since   11.1
 	 */
-	protected function _list_render($list)
+	protected function _list_render(array $list)
 	{
 		// Reverse output rendering for right-to-left display.
 		$html = '<ul>';
@@ -593,7 +593,7 @@ class JPagination
 	 *
 	 * @param   JPaginationObject  $item  The object with which to make an active link.
 	 *
-	 * @return   string  HTML link
+	 * @return  string  HTML link
 	 *
 	 * @since    11.1
 	 */

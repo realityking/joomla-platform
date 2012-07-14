@@ -66,10 +66,10 @@ class JDatabaseDriverPostgresql extends JDatabaseDriver
 	 *
 	 * @since	12.1
 	 */
-	public function __construct( $options )
+	public function __construct(array $options)
 	{
-		$options['host'] = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user'] = (isset($options['user'])) ? $options['user'] : '';
+		$options['host']     = (isset($options['host'])) ? $options['host'] : 'localhost';
+		$options['user']     = (isset($options['user'])) ? $options['user'] : '';
 		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
 		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
 

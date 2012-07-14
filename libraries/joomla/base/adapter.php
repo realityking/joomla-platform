@@ -136,7 +136,7 @@ class JAdapter extends JObject
 	 *
 	 * @since   11.1
 	 */
-	public function getAdapter($name, $options = array())
+	public function getAdapter($name, array $options = array())
 	{
 		if (!array_key_exists($name, $this->_adapters))
 		{
@@ -160,7 +160,7 @@ class JAdapter extends JObject
 	 *
 	 * @since   11.1
 	 */
-	public function loadAllAdapters($options = array())
+	public function loadAllAdapters(array $options = array())
 	{
 		$files = new DirectoryIterator($this->_basepath . '/' . $this->_adapterfolder);
 

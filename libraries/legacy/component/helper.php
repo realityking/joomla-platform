@@ -286,7 +286,7 @@ class JComponentHelper
 	 * @since   11.1
 	 * @throws  Exception
 	 */
-	public static function renderComponent($option, $params = array())
+	public static function renderComponent($option, array $params = array())
 	{
 		$app = JFactory::getApplication();
 

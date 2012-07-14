@@ -167,7 +167,7 @@ class JControllerLegacy extends JObject
 	 * @note    Replaced _createFileName.
 	 * @since   12.2
 	 */
-	protected static function createFileName($type, $parts = array())
+	protected static function createFileName($type, array $parts = array())
 	{
 		$filename = '';
 
@@ -221,7 +221,7 @@ class JControllerLegacy extends JObject
 	 * @since   12.2
 	 * @throws  Exception if the controller cannot be loaded.
 	 */
-	public static function getInstance($prefix, $config = array())
+	public static function getInstance($prefix, array $config = array())
 	{
 		if (is_object(self::$instance))
 		{
@@ -316,7 +316,7 @@ class JControllerLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		$this->methods = array();
 		$this->message = null;
@@ -584,7 +584,7 @@ class JControllerLegacy extends JObject
 	 * @note    Replaces _createView.
 	 * @throws  Exception
 	 */
-	protected function createView($name, $prefix = '', $type = '', $config = array())
+	protected function createView($name, $prefix = '', $type = '', array $config = array())
 	{
 		// Clean the view name
 		$viewName = preg_replace('/[^A-Z0-9_]/i', '', $name);
@@ -630,7 +630,7 @@ class JControllerLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	public function display($cachable = false, $urlparams = array())
+	public function display($cachable = false, array $urlparams = array())
 	{
 		$document = JFactory::getDocument();
 		$viewType = $document->getType();
@@ -733,7 +733,7 @@ class JControllerLegacy extends JObject
 	 *
 	 * @since   12.2
 	 */
-	public function getModel($name = '', $prefix = '', $config = array())
+	public function getModel($name = '', $prefix = '', array $config = array())
 	{
 		if (empty($name))
 		{
@@ -831,7 +831,7 @@ class JControllerLegacy extends JObject
 	 * @since   12.2
 	 * @throws  Exception
 	 */
-	public function getView($name = '', $type = '', $prefix = '', $config = array())
+	public function getView($name = '', $type = '', $prefix = '', array $config = array())
 	{
 		static $views;
 

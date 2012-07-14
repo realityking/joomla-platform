@@ -21,7 +21,7 @@ class JDocumentRendererModule extends JDocumentRenderer
 	/**
 	 * Renders a module script and returns the results as a string
 	 *
-	 * @param   string  $module   The name of the module to render
+	 * @param   mixed   $module   The name of the module to render
 	 * @param   array   $attribs  Associative array of values
 	 * @param   string  $content  If present, module information from the buffer will be used
 	 *
@@ -29,7 +29,7 @@ class JDocumentRendererModule extends JDocumentRenderer
 	 *
 	 * @since   11.1
 	 */
-	public function render($module, $attribs = array(), $content = null)
+	public function render($module, array $attribs = array(), $content = null)
 	{
 		if (!is_object($module))
 		{

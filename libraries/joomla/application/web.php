@@ -460,7 +460,6 @@ class JApplicationWeb extends JApplicationBase
 	 */
 	public function redirect($url, $moved = false)
 	{
-		// Import library dependencies.
 		jimport('phputf8.utils.ascii');
 
 		// Check for relative internal links.

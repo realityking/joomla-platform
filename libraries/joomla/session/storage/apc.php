@@ -27,7 +27,7 @@ class JSessionStorageApc extends JSessionStorage
 	 * @since   11.1
 	 * @throws  RuntimeException
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		if (!self::isSupported())
 		{

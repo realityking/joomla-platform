@@ -55,7 +55,7 @@ class JMenu
 	 *
 	 * @since   11.1
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		// Load the menu items
 		$this->load();
@@ -84,7 +84,7 @@ class JMenu
 	 *
 	 * @since   11.1
 	 */
-	public static function getInstance($client, $options = array())
+	public static function getInstance($client, array $options = array())
 	{
 		if (empty(self::$instances[$client]))
 		{

@@ -135,7 +135,7 @@ class JAccessRules
 	 *
 	 * @since   11.1
 	 */
-	public function mergeAction($action, $identities)
+	public function mergeAction($action, array $identities)
 	{
 		if (isset($this->data[$action]))
 		{
@@ -178,7 +178,7 @@ class JAccessRules
 	 *
 	 * @param   mixed  $identity  An integer representing the identity or an array of identities
 	 *
-	 * @return  object  Allowed actions for the identity or identities
+	 * @return  JObject  Allowed actions for the identity or identities
 	 *
 	 * @since   11.1
 	 */

@@ -171,11 +171,10 @@ class JDocumentFeed extends JDocument
 	 *
 	 * @since  11.1
 	 */
-	public function __construct($options = array())
+	public function __construct(array $options = array())
 	{
 		parent::__construct($options);
 
-		// Set document type
 		$this->_type = 'feed';
 	}
 
@@ -191,7 +190,7 @@ class JDocumentFeed extends JDocument
 	 * @throws Exception
 	 * @todo   Make this cacheable
 	 */
-	public function render($cache = false, $params = array())
+	public function render($cache = false, array $params = array())
 	{
 		// Get the feed type
 		$type = JFactory::getApplication()->input->get('type', 'rss');
