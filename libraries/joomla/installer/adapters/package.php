@@ -9,7 +9,6 @@
 
 defined('JPATH_PLATFORM') or die;
 
-jimport('joomla.base.adapterinstance');
 jimport('joomla.installer.packagemanifest');
 
 /**
@@ -19,17 +18,8 @@ jimport('joomla.installer.packagemanifest');
  * @subpackage  Installer
  * @since       11.1
  */
-class JInstallerPackage extends JAdapterInstance
+class JInstallerPackage extends JInstallerAdapter
 {
-	/**
-	 * Method of system
-	 *
-	 * @var    string
-	 *
-	 * @since  11.1
-	 */
-	protected $route = 'install';
-
 	/**
 	 * Load language from a path
 	 *
@@ -43,12 +33,8 @@ class JInstallerPackage extends JAdapterInstance
 	{
 		$this->manifest = $this->parent->getManifest();
 		$extension = 'pkg_' . strtolower(JFilterInput::getInstance()->clean((string) $this->manifest->packagename, 'cmd'));
-		$lang = JFactory::getLanguage();
-		$source = $path;
-		$lang->load($extension . '.sys', $source, null, false, false)
-			|| $lang->load($extension . '.sys', JPATH_SITE, null, false, false)
-			|| $lang->load($extension . '.sys', $source, $lang->getDefault(), false, false)
-			|| $lang->load($extension . '.sys', JPATH_SITE, $lang->getDefault(), false, false);
+
+		$this->doLoadLanguage($extension, $path);
 	}
 
 	/**
@@ -60,8 +46,7 @@ class JInstallerPackage extends JAdapterInstance
 	 */
 	public function install()
 	{
-		// Get the extension manifest object
-		$this->manifest = $this->parent->getManifest();
+		parent::install();
 
 		/*
 		 * ---------------------------------------------------------------------------------------------
@@ -69,25 +54,8 @@ class JInstallerPackage extends JAdapterInstance
 		 * ---------------------------------------------------------------------------------------------
 		 */
 
-		// Set the extensions name
-		$filter = JFilterInput::getInstance();
-		$name = (string) $this->manifest->packagename;
-		$name = $filter->clean($name, 'cmd');
-		$this->set('name', $name);
-
 		$element = 'pkg_' . $filter->clean($this->manifest->packagename, 'cmd');
-		$this->set('element', $element);
-
-		// Get the component description
-		$description = (string) $this->manifest->description;
-		if ($description)
-		{
-			$this->parent->set('message', JText::_($description));
-		}
-		else
-		{
-			$this->parent->set('message', '');
-		}
+		$this->element = $element;
 
 		// Set the installation path
 		$files = $this->manifest->files;
@@ -126,51 +94,8 @@ class JInstallerPackage extends JAdapterInstance
 		 * ---------------------------------------------------------------------------------------------
 		 */
 
-		// If there is an manifest class file, lets load it; we'll copy it later (don't have dest yet)
-		$this->scriptElement = $this->manifest->scriptfile;
-		$manifestScript = (string) $this->manifest->scriptfile;
-
-		if ($manifestScript)
-		{
-			$manifestScriptFile = $this->parent->getPath('source') . '/' . $manifestScript;
-
-			if (is_file($manifestScriptFile))
-			{
-				// Load the file
-				include_once $manifestScriptFile;
-			}
-
-			// Set the class name
-			$classname = $element . 'InstallerScript';
-
-			if (class_exists($classname))
-			{
-				// Create a new instance
-				$this->parent->manifestClass = new $classname($this);
-
-				// And set this so we can copy it later
-				$this->set('manifest_script', $manifestScript);
-			}
-		}
-
-		// Run preflight if possible (since we know we're not an update)
-		ob_start();
-		ob_implicit_flush(false);
-
-		if ($this->parent->manifestClass && method_exists($this->parent->manifestClass, 'preflight'))
-		{
-			if ($this->parent->manifestClass->preflight($this->route, $this) === false)
-			{
-				// Preflight failed, rollback changes
-				$this->parent->abort(JText::_('JLIB_INSTALLER_ABORT_PACKAGE_INSTALL_CUSTOM_INSTALL_FAILURE'));
-
-				return false;
-			}
-		}
-
-		// Create msg object; first use here
-		$msg = ob_get_contents();
-		ob_end_clean();
+		$this->handleScriptfile();
+		$msg = $this->triggerManifestScriptPreflight();
 
 		/*
 		 * ---------------------------------------------------------------------------------------------
@@ -244,16 +169,16 @@ class JInstallerPackage extends JAdapterInstance
 		 */
 
 		$row = JTable::getInstance('extension');
-		$eid = $row->find(array('element' => strtolower($this->get('element')), 'type' => 'package'));
+		$eid = $row->find(array('element' => strtolower($this->element), 'type' => 'package'));
 		if ($eid)
 		{
 			$row->load($eid);
 		}
 		else
 		{
-			$row->name = $this->get('name');
+			$row->name = $this->name;
 			$row->type = 'package';
-			$row->element = $this->get('element');
+			$row->element = $this->element;
 
 			// There is no folder for modules
 			$row->folder = '';
@@ -340,17 +265,7 @@ class JInstallerPackage extends JAdapterInstance
 		}
 
 		// And now we run the postflight
-		ob_start();
-		ob_implicit_flush(false);
-
-		if ($this->parent->manifestClass && method_exists($this->parent->manifestClass, 'postflight'))
-		{
-			$this->parent->manifestClass->postflight($this->route, $this, $results);
-		}
-
-		// Append messages
-		$msg .= ob_get_contents();
-		ob_end_clean();
+		$msg .= $this->triggerManifestScriptPostflight();
 
 		if ($msg != '')
 		{
@@ -429,44 +344,8 @@ class JInstallerPackage extends JAdapterInstance
 			return false;
 		}
 
-		// If there is an manifest class file, let's load it
-		$this->scriptElement = $manifest->scriptfile;
-		$manifestScript = (string) $manifest->scriptfile;
-
-		if ($manifestScript)
-		{
-			$manifestScriptFile = $this->parent->getPath('extension_root') . '/' . $manifestScript;
-
-			if (is_file($manifestScriptFile))
-			{
-				// Load the file
-				include_once $manifestScriptFile;
-			}
-
-			// Set the class name
-			$classname = $row->element . 'InstallerScript';
-
-			if (class_exists($classname))
-			{
-				// Create a new instance
-				$this->parent->manifestClass = new $classname($this);
-
-				// And set this so we can copy it later
-				$this->set('manifest_script', $manifestScript);
-			}
-		}
-
-		ob_start();
-		ob_implicit_flush(false);
-
-		// Run uninstall if possible
-		if ($this->parent->manifestClass && method_exists($this->parent->manifestClass, 'uninstall'))
-		{
-			$this->parent->manifestClass->uninstall($this);
-		}
-
-		$msg = ob_get_contents();
-		ob_end_clean();
+		$this->setupScriptfile();
+		$msg = $this->triggerManifestScriptUninstall();
 
 		if ($msg != '')
 		{
@@ -580,21 +459,7 @@ class JInstallerPackage extends JAdapterInstance
 	{
 		// Need to find to find where the XML file is since we don't store this normally
 		$manifestPath = JPATH_MANIFESTS . '/packages/' . $this->parent->extension->element . '.xml';
-		$this->parent->manifest = $this->parent->isManifest($manifestPath);
-		$this->parent->setPath('manifest', $manifestPath);
 
-		$manifest_details = JInstaller::parseXMLInstallFile($this->parent->getPath('manifest'));
-		$this->parent->extension->manifest_cache = json_encode($manifest_details);
-		$this->parent->extension->name = $manifest_details['name'];
-
-		try
-		{
-			return $this->parent->extension->store();
-		}
-		catch (RuntimeException $e)
-		{
-			JLog::add(JText::_('JLIB_INSTALLER_ERROR_PACK_REFRESH_MANIFEST_CACHE'), JLog::WARNING, 'jerror');
-			return false;
-		}
+		return $this->doRefreshManifestCache($manifestPath);
 	}
 }

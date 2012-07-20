@@ -10,7 +10,6 @@
 defined('JPATH_PLATFORM') or die;
 
 jimport('joomla.installer.librarymanifest');
-jimport('joomla.base.adapterinstance');
 
 /**
  * Library installer
@@ -19,12 +18,12 @@ jimport('joomla.base.adapterinstance');
  * @subpackage  Installer
  * @since       11.1
  */
-class JInstallerLibrary extends JAdapterInstance
+class JInstallerLibrary extends JInstallerAdapter
 {
 	/**
-	 * Custom loadLanguage method
+	 * Load language from a path
 	 *
-	 * @param   string  $path  The path where to find language files.
+	 * @param   string  $path  The path of the language.
 	 *
 	 * @return  void
 	 *
@@ -40,12 +39,9 @@ class JInstallerLibrary extends JAdapterInstance
 		$this->manifest = $this->parent->getManifest();
 		$extension = 'lib_' . strtolower(JFilterInput::getInstance()->clean((string) $this->manifest->name, 'cmd'));
 		$name = strtolower((string) $this->manifest->libraryname);
-		$lang = JFactory::getLanguage();
 		$source = $path ? $path : JPATH_PLATFORM . "/$name";
-		$lang->load($extension . '.sys', $source, null, false, false)
-			|| $lang->load($extension . '.sys', JPATH_SITE, null, false, false)
-			|| $lang->load($extension . '.sys', $source, $lang->getDefault(), false, false)
-			|| $lang->load($extension . '.sys', JPATH_SITE, $lang->getDefault(), false, false);
+
+		$this->doLoadLanguage($extension, $source);
 	}
 
 	/**
@@ -57,8 +53,7 @@ class JInstallerLibrary extends JAdapterInstance
 	 */
 	public function install()
 	{
-		// Get the extension manifest object
-		$this->manifest = $this->parent->getManifest();
+		parent::install();
 
 		/*
 		 * ---------------------------------------------------------------------------------------------
@@ -66,21 +61,10 @@ class JInstallerLibrary extends JAdapterInstance
 		 * ---------------------------------------------------------------------------------------------
 		 */
 
-		// Set the extension's name
-		$name = JFilterInput::getInstance()->clean((string) $this->manifest->name, 'string');
 		$element = str_replace('.xml', '', basename($this->parent->getPath('manifest')));
-		$this->set('name', $name);
-		$this->set('element', $element);
+		$this->element = $element;
 
-		$db = $this->parent->getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('extension_id'));
-		$query->from($db->quoteName('#__extensions'));
-		$query->where($db->quoteName('type') . ' = ' . $db->quote('library'));
-		$query->where($db->quoteName('element') . ' = ' . $db->quote($element));
-		$db->setQuery($query);
-		$result = $db->loadResult();
-		if ($result)
+		if ($this->extensionExists($element, 'library'))
 		{
 			// Already installed, can we upgrade?
 			if ($this->parent->isOverwrite() || $this->parent->isUpgrade())
@@ -95,17 +79,6 @@ class JInstallerLibrary extends JAdapterInstance
 				$this->parent->abort(JText::_('JLIB_INSTALLER_ABORT_LIB_INSTALL_ALREADY_INSTALLED'));
 				return false;
 			}
-		}
-
-		// Get the library's description
-		$description = (string) $this->manifest->description;
-		if ($description)
-		{
-			$this->parent->set('message', JText::_($description));
-		}
-		else
-		{
-			$this->parent->set('message', '');
 		}
 
 		// Set the installation path
@@ -163,9 +136,9 @@ class JInstallerLibrary extends JAdapterInstance
 
 		// Extension Registration
 		$row = JTable::getInstance('extension');
-		$row->name = $this->get('name');
+		$row->name = $this->name;
 		$row->type = 'library';
-		$row->element = $this->get('element');
+		$row->element = $this->element;
 
 		// There is no folder for libraries
 		$row->folder = '';
@@ -226,9 +199,10 @@ class JInstallerLibrary extends JAdapterInstance
 		// Set the extensions name
 		$name = (string) $this->manifest->name;
 		$name = JFilterInput::getInstance()->clean($name, 'string');
+		$this->name = $name;
+
 		$element = str_replace('.xml', '', basename($this->parent->getPath('manifest')));
-		$this->set('name', $name);
-		$this->set('element', $element);
+		$this->element = $element;
 
 		// We don't want to compromise this instance!
 		$installer = new JInstaller;
@@ -419,21 +393,7 @@ class JInstallerLibrary extends JAdapterInstance
 	{
 		// Need to find to find where the XML file is since we don't store this normally
 		$manifestPath = JPATH_MANIFESTS . '/libraries/' . $this->parent->extension->element . '.xml';
-		$this->parent->manifest = $this->parent->isManifest($manifestPath);
-		$this->parent->setPath('manifest', $manifestPath);
 
-		$manifest_details = JInstaller::parseXMLInstallFile($this->parent->getPath('manifest'));
-		$this->parent->extension->manifest_cache = json_encode($manifest_details);
-		$this->parent->extension->name = $manifest_details['name'];
-
-		try
-		{
-			return $this->parent->extension->store();
-		}
-		catch (RuntimeException $e)
-		{
-			JLog::add(JText::_('JLIB_INSTALLER_ERROR_LIB_REFRESH_MANIFEST_CACHE'), JLog::WARNING, 'jerror');
-			return false;
-		}
+		return $this->doRefreshManifestCache($manifestPath);
 	}
 }
