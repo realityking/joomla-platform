@@ -1482,22 +1482,29 @@ class JInstallerComponent extends JAdapterInstance
 	 */
 	public function discover()
 	{
-		$results = array();
-		$site_components = JFolder::folders(JPATH_SITE . '/components');
-		$admin_components = JFolder::folders(JPATH_ADMINISTRATOR . '/components');
+		$results          = array();
+		$site_components  = new DirectoryIterator(JPATH_SITE . '/components');
+		$admin_components = new DirectoryIterator(JPATH_ADMINISTRATOR . '/components');
 
 		foreach ($site_components as $component)
 		{
-			if (file_exists(JPATH_SITE . '/components/' . $component . '/' . str_replace('com_', '', $component) . '.xml'))
+			if (!$component->isDir() || $component->isDot())
+			{
+				continue;
+			}
+
+			$componentName = $component->getFilename();
+
+			if (file_exists(JPATH_SITE . '/components/' . $componentName . '/' . str_replace('com_', '', $componentName) . '.xml'))
 			{
 				$manifest_details = JInstaller::parseXMLInstallFile(
-					JPATH_SITE . '/components/' . $component . '/' . str_replace('com_', '', $component) . '.xml'
+					JPATH_SITE . '/components/' . $componentName . '/' . str_replace('com_', '', $componentName) . '.xml'
 				);
 				$extension = JTable::getInstance('extension');
 				$extension->set('type', 'component');
 				$extension->set('client_id', 0);
-				$extension->set('element', $component);
-				$extension->set('name', $component);
+				$extension->set('element', $componentName);
+				$extension->set('name', $componentName);
 				$extension->set('state', -1);
 				$extension->set('manifest_cache', json_encode($manifest_details));
 				$results[] = $extension;
@@ -1506,16 +1513,23 @@ class JInstallerComponent extends JAdapterInstance
 
 		foreach ($admin_components as $component)
 		{
-			if (file_exists(JPATH_ADMINISTRATOR . '/components/' . $component . '/' . str_replace('com_', '', $component) . '.xml'))
+			if (!$component->isDir() || $component->isDot())
+			{
+				continue;
+			}
+
+			$componentname = $component->getFilename();
+
+			if (file_exists(JPATH_ADMINISTRATOR . '/components/' . $componentname . '/' . str_replace('com_', '', $componentname) . '.xml'))
 			{
 				$manifest_details = JInstaller::parseXMLInstallFile(
-					JPATH_ADMINISTRATOR . '/components/' . $component . '/' . str_replace('com_', '', $component) . '.xml'
+					JPATH_ADMINISTRATOR . '/components/' . $componentname . '/' . str_replace('com_', '', $componentname) . '.xml'
 				);
 				$extension = JTable::getInstance('extension');
 				$extension->set('type', 'component');
 				$extension->set('client_id', 1);
-				$extension->set('element', $component);
-				$extension->set('name', $component);
+				$extension->set('element', $componentname);
+				$extension->set('name', $componentname);
 				$extension->set('state', -1);
 				$extension->set('manifest_cache', json_encode($manifest_details));
 				$results[] = $extension;

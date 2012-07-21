@@ -352,20 +352,32 @@ class JInstallerLibrary extends JAdapterInstance
 	public function discover()
 	{
 		$results = array();
-		$file_list = JFolder::files(JPATH_MANIFESTS . '/libraries', '\.xml$');
+		$file_list = new DirectoryIterator(JPATH_MANIFESTS . '/libraries');
+
 		foreach ($file_list as $file)
 		{
-			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_MANIFESTS . '/libraries/' . $file);
-			$file = JFile::stripExt($file);
+			$filename = $file->getFilename();
+
+			// Only load for xml files.
+			// Note: DirectoryIterator::getExtension only available PHP >= 5.3.6
+			if (!$file->isFile() || substr($filename, strrpos($filename, '.') + 1) != 'xml')
+			{
+				continue;
+			}
+
+			$filenameNoExt = $file->getBasename('.xml');
+
+			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_MANIFESTS . '/libraries/' . $filename);
 			$extension = JTable::getInstance('extension');
 			$extension->set('type', 'library');
 			$extension->set('client_id', 0);
-			$extension->set('element', $file);
-			$extension->set('name', $file);
+			$extension->set('element', $filenameNoExt);
+			$extension->set('name', $filenameNoExt);
 			$extension->set('state', -1);
 			$extension->set('manifest_cache', json_encode($manifest_details));
 			$results[] = $extension;
 		}
+
 		return $results;
 	}
 

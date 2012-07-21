@@ -597,20 +597,27 @@ class JInstallerModule extends JAdapterInstance
 	 */
 	public function discover()
 	{
-		$results = array();
-		$site_list = JFolder::folders(JPATH_SITE . '/modules');
-		$admin_list = JFolder::folders(JPATH_ADMINISTRATOR . '/modules');
-		$site_info = JApplicationHelper::getClientInfo('site', true);
+		$results    = array();
+		$site_list  = new DirectoryIterator(JPATH_SITE . '/modules');
+		$admin_list = new DirectoryIterator(JPATH_ADMINISTRATOR . '/modules');
+		$site_info  = JApplicationHelper::getClientInfo('site', true);
 		$admin_info = JApplicationHelper::getClientInfo('administrator', true);
 
 		foreach ($site_list as $module)
 		{
-			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_SITE . "/modules/$module/$module.xml");
+			if (!$module->isDir() || $module->isDot())
+			{
+				continue;
+			}
+
+			$moduleName = $module->getFilename();
+
+			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_SITE . '/modules/' . $moduleName . '/$module.xml');
 			$extension = JTable::getInstance('extension');
 			$extension->set('type', 'module');
 			$extension->set('client_id', $site_info->id);
-			$extension->set('element', $module);
-			$extension->set('name', $module);
+			$extension->set('element', $moduleName);
+			$extension->set('name', $moduleName);
 			$extension->set('state', -1);
 			$extension->set('manifest_cache', json_encode($manifest_details));
 			$results[] = clone $extension;
@@ -618,12 +625,19 @@ class JInstallerModule extends JAdapterInstance
 
 		foreach ($admin_list as $module)
 		{
-			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_ADMINISTRATOR . "/modules/$module/$module.xml");
+			if (!$module->isDir() || $module->isDot())
+			{
+				continue;
+			}
+
+			$moduleName = $module->getFilename();
+
+			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_ADMINISTRATOR . '/modules/' . $moduleName . '/$module.xml');
 			$extension = JTable::getInstance('extension');
 			$extension->set('type', 'module');
 			$extension->set('client_id', $admin_info->id);
-			$extension->set('element', $module);
-			$extension->set('name', $module);
+			$extension->set('element', $moduleName);
+			$extension->set('name', $moduleName);
 			$extension->set('state', -1);
 			$extension->set('manifest_cache', json_encode($manifest_details));
 			$results[] = clone $extension;

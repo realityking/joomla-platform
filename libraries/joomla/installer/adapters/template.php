@@ -474,25 +474,33 @@ class JInstallerTemplate extends JAdapterInstance
 	 */
 	public function discover()
 	{
-		$results = array();
-		$site_list = JFolder::folders(JPATH_SITE . '/templates');
-		$admin_list = JFolder::folders(JPATH_ADMINISTRATOR . '/templates');
-		$site_info = JApplicationHelper::getClientInfo('site', true);
+		$results    = array();
+		$site_list  = new DirectoryIterator(JPATH_SITE . '/templates');
+		$admin_list = new DirectoryIterator(JPATH_ADMINISTRATOR . '/templates');
+		$site_info  = JApplicationHelper::getClientInfo('site', true);
 		$admin_info = JApplicationHelper::getClientInfo('administrator', true);
 
 		foreach ($site_list as $template)
 		{
-			if ($template == 'system')
+			if (!$template->isDir() || $template->isDot())
+			{
+				continue;
+			}
+
+			$templateName = $template->getFilename();
+
+			if ($templateName == 'system')
 			{
 				// Ignore special system template
 				continue;
 			}
-			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_SITE . "/templates/$template/templateDetails.xml");
+
+			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_SITE . '/templates/' . $templateName . '/templateDetails.xml');
 			$extension = JTable::getInstance('extension');
 			$extension->set('type', 'template');
 			$extension->set('client_id', $site_info->id);
-			$extension->set('element', $template);
-			$extension->set('name', $template);
+			$extension->set('element', $templateName);
+			$extension->set('name', $templateName);
 			$extension->set('state', -1);
 			$extension->set('manifest_cache', json_encode($manifest_details));
 			$results[] = $extension;
@@ -500,18 +508,23 @@ class JInstallerTemplate extends JAdapterInstance
 
 		foreach ($admin_list as $template)
 		{
-			if ($template == 'system')
+			if (!$template->isDir() || $template->isDot())
+			{
+				continue;
+			}
+
+			if ($templateName == 'system')
 			{
 				// Ignore special system template
 				continue;
 			}
 
-			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_ADMINISTRATOR . "/templates/$template/templateDetails.xml");
+			$manifest_details = JInstaller::parseXMLInstallFile(JPATH_ADMINISTRATOR . '/templates/' . $templateName . '/templateDetails.xml');
 			$extension = JTable::getInstance('extension');
 			$extension->set('type', 'template');
 			$extension->set('client_id', $admin_info->id);
-			$extension->set('element', $template);
-			$extension->set('name', $template);
+			$extension->set('element', $templateName);
+			$extension->set('name', $templateName);
 			$extension->set('state', -1);
 			$extension->set('manifest_cache', json_encode($manifest_details));
 			$results[] = $extension;

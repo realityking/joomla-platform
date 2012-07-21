@@ -702,68 +702,51 @@ class JInstallerPlugin extends JAdapterInstance
 	/**
 	 * Custom discover method
 	 *
-	 * @return  array  JExtension) list of extensions available
+	 * @return  array  (JExtension) list of extensions available
 	 *
 	 * @since   11.1
 	 */
 	public function discover()
 	{
-		$results = array();
-		$folder_list = JFolder::folders(JPATH_SITE . '/plugins');
+		$results  = array();
+		$iterator = new RecursiveDirectoryIterator(JPATH_SITE . '/plugins', RecursiveDirectoryIterator::KEY_AS_PATHNAME | RecursiveDirectoryIterator::CURRENT_AS_SELF | RecursiveDirectoryIterator::SKIP_DOTS);
+		$files    = new RecursiveIteratorIterator($iterator);
+		$files->setMaxDepth(2);
 
-		foreach ($folder_list as $folder)
+		foreach ($files as $path => $file)
 		{
-			$file_list = JFolder::files(JPATH_SITE . '/plugins/' . $folder, '\.xml$');
-			foreach ($file_list as $file)
+			$filename = $file->getFilename();
+
+			// Only load for php files.
+			// Note: DirectoryIterator::getExtension only available PHP >= 5.3.6
+			if (!$file->isFile() || substr($filename, strrpos($filename, '.') + 1) != 'xml' || $files->getDepth() !== 2)
 			{
-				$manifest_details = JInstaller::parseXMLInstallFile(JPATH_SITE . '/plugins/' . $folder . '/' . $file);
-				$file = JFile::stripExt($file);
-
-				// Ignore example plugins
-				if ($file == 'example')
-				{
-					continue;
-				}
-
-				$extension = JTable::getInstance('extension');
-				$extension->set('type', 'plugin');
-				$extension->set('client_id', 0);
-				$extension->set('element', $file);
-				$extension->set('folder', $folder);
-				$extension->set('name', $file);
-				$extension->set('state', -1);
-				$extension->set('manifest_cache', json_encode($manifest_details));
-				$results[] = $extension;
+				continue;
 			}
-			$folder_list = JFolder::folders(JPATH_SITE . '/plugins/' . $folder);
-			foreach ($folder_list as $plugin_folder)
+
+			$manifest_details = JInstaller::parseXMLInstallFile($path);
+			$filenameNoExt = $file->getBasename('.xml');
+
+			// Ignore example plugins
+			if ($filenameNoExt == 'example')
 			{
-				$file_list = JFolder::files(JPATH_SITE . '/plugins/' . $folder . '/' . $plugin_folder, '\.xml$');
-				foreach ($file_list as $file)
-				{
-					$manifest_details = JInstaller::parseXMLInstallFile(
-						JPATH_SITE . '/plugins/' . $folder . '/' . $plugin_folder . '/' . $file
-					);
-					$file = JFile::stripExt($file);
-
-					if ($file == 'example')
-					{
-						continue;
-					}
-
-					// Ignore example plugins
-					$extension = JTable::getInstance('extension');
-					$extension->set('type', 'plugin');
-					$extension->set('client_id', 0);
-					$extension->set('element', $file);
-					$extension->set('folder', $folder);
-					$extension->set('name', $file);
-					$extension->set('state', -1);
-					$extension->set('manifest_cache', json_encode($manifest_details));
-					$results[] = $extension;
-				}
+				continue;
 			}
+
+			$folders = explode('/', $file->getSubPath());
+			$folder = $folders[0];
+
+			$extension = JTable::getInstance('extension');
+			$extension->set('type', 'plugin');
+			$extension->set('client_id', 0);
+			$extension->set('element', $filenameNoExt);
+			$extension->set('folder', $folder);
+			$extension->set('name', $filenameNoExt);
+			$extension->set('state', -1);
+			$extension->set('manifest_cache', json_encode($manifest_details));
+			$results[] = $extension;
 		}
+
 		return $results;
 	}
 

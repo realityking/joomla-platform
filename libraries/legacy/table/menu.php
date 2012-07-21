@@ -111,8 +111,7 @@ class JTableMenu extends JTableNested
 		}
 
 		// Verify that a first level menu item alias is not the name of a folder.
-		jimport('joomla.filesystem.folder');
-		if ($this->parent_id == 1 && in_array($this->alias, JFolder::folders(JPATH_ROOT)))
+		if ($this->parent_id == 1 && in_array($this->alias, $this->_getListofRootFolders))
 		{
 			$this->setError(JText::sprintf('JLIB_DATABASE_ERROR_MENU_ROOT_ALIAS_FOLDER', $this->alias, $this->alias));
 			return false;
@@ -126,6 +125,33 @@ class JTableMenu extends JTableNested
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns all folders that exist in the root directory.
+	 *
+	 * @return  array  Folders in the applications root.
+	 *
+	 * @since   12.2
+	 */
+	private function _getListofRootFolders()
+	{
+		static $folders = array();
+
+		if (!empty($folders))
+		{
+			return $folders;
+		}
+
+		$files = new DirectoryIterator(JPATH_ROOT);
+
+		foreach ($files as $file)
+		{
+			if ($file->isDir())
+			{
+				$folders[] = $file->getFilename();
+			}
+		}
 	}
 
 	/**

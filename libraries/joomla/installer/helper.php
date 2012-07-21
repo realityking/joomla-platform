@@ -127,13 +127,14 @@ abstract class JInstallerHelper
 		 * List all the items in the installation directory.  If there is only one, and
 		 * it is a folder, then we will set that folder to be the installation folder.
 		 */
-		$dirList = array_merge(JFolder::files($extractdir, ''), JFolder::folders($extractdir, ''));
+		$iterator = new FilesystemIterator($extractdir);
 
-		if (count($dirList) == 1)
+		if (iterator_count($dirList) == 1)
 		{
-			if (JFolder::exists($extractdir . '/' . $dirList[0]))
+			$dirList = iterator_to_array($iterator, false);
+			if ($dirList[0]->isDir())
 			{
-				$extractdir = JPath::clean($extractdir . '/' . $dirList[0]);
+				$extractdir = JPath::clean($dirList[0]->getPath());
 			}
 		}
 

@@ -516,19 +516,27 @@ class JInstallerLanguage extends JAdapterInstance
 	 */
 	public function discover()
 	{
-		$results = array();
-		$site_languages = JFolder::folders(JPATH_SITE . '/language');
-		$admin_languages = JFolder::folders(JPATH_ADMINISTRATOR . '/language');
+		$results         = array();
+		$site_languages  = new DirectoryIterator(JPATH_SITE . '/language');
+		$admin_languages = new DirectoryIterator(JPATH_ADMINISTRATOR . '/language');
+
 		foreach ($site_languages as $language)
 		{
-			if (file_exists(JPATH_SITE . '/language/' . $language . '/' . $language . '.xml'))
+			if (!$language->isDir() || $language->isDot())
 			{
-				$manifest_details = JInstaller::parseXMLInstallFile(JPATH_SITE . '/language/' . $language . '/' . $language . '.xml');
+				continue;
+			}
+
+			$languageName = $language->getFilename();
+
+			if (file_exists(JPATH_SITE . '/language/' . $languageName . '/' . $languageName . '.xml'))
+			{
+				$manifest_details = JInstaller::parseXMLInstallFile(JPATH_SITE . '/language/' . $languageName . '/' . $languageName . '.xml');
 				$extension = JTable::getInstance('extension');
 				$extension->set('type', 'language');
 				$extension->set('client_id', 0);
-				$extension->set('element', $language);
-				$extension->set('name', $language);
+				$extension->set('element', $languageName);
+				$extension->set('name', $languageName);
 				$extension->set('state', -1);
 				$extension->set('manifest_cache', json_encode($manifest_details));
 				$results[] = $extension;
@@ -536,14 +544,21 @@ class JInstallerLanguage extends JAdapterInstance
 		}
 		foreach ($admin_languages as $language)
 		{
-			if (file_exists(JPATH_ADMINISTRATOR . '/language/' . $language . '/' . $language . '.xml'))
+			if (!$language->isDir() || $language->isDot())
 			{
-				$manifest_details = JInstaller::parseXMLInstallFile(JPATH_ADMINISTRATOR . '/language/' . $language . '/' . $language . '.xml');
+				continue;
+			}
+
+			$languageName = $language->getFilename();
+
+			if (file_exists(JPATH_ADMINISTRATOR . '/language/' . $languageName . '/' . $languageName . '.xml'))
+			{
+				$manifest_details = JInstaller::parseXMLInstallFile(JPATH_ADMINISTRATOR . '/language/' . $languageName . '/' . $languageName . '.xml');
 				$extension = JTable::getInstance('extension');
 				$extension->set('type', 'language');
 				$extension->set('client_id', 1);
-				$extension->set('element', $language);
-				$extension->set('name', $language);
+				$extension->set('element', $languageName);
+				$extension->set('name', $languageName);
 				$extension->set('state', -1);
 				$extension->set('manifest_cache', json_encode($manifest_details));
 				$results[] = $extension;

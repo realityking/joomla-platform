@@ -16,7 +16,7 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  Installer
  * @since       11.1
  */
-class JLibraryManifest extends JObject
+class JLibraryManifest
 {
 	/**
 	 * @var string name Name of Library

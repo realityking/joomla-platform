@@ -18,7 +18,7 @@ jimport('joomla.installer.extension');
  * @subpackage  Installer
  * @since       11.1
  */
-class JPackageManifest extends JObject
+class JPackageManifest
 {
 	/**
 	 * @var string name Name of the package
