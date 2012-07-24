@@ -17,7 +17,7 @@ defined('JPATH_PLATFORM') or die;
  * @see         http://php.net/pdo
  * @since       12.1
  */
-abstract class JDatabaseDriverPdo extends JDatabaseDriver
+abstract class JDatabaseDriverPdo extends JDatabaseDriver implements JDatabaseDriverPrepareable
 {
 	/**
 	 * The name of the database driver.
@@ -293,10 +293,11 @@ abstract class JDatabaseDriverPdo extends JDatabaseDriver
 				$this->options['password'],
 				$this->options['driverOptions']
 			);
+			$this->connection->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('JDatabaseStatementPdo', array($this)));
 		}
 		catch (PDOException $e)
 		{
-			throw new RuntimeException('Could not connect to PDO' . ': ' . $e->getMessage(), 2);
+			throw new RuntimeException('Could not connect to PDO' . ': ' . $e->getMessage(), 2, $e);
 		}
 	}
 
@@ -449,6 +450,33 @@ abstract class JDatabaseDriverPdo extends JDatabaseDriver
 		}
 
 		return $this->prepared;
+	}
+
+	/*
+	 *
+	 * @return  JDatabaseStatement
+	 *
+	 * @since   12.2
+	 * @throws  RuntimeException
+	 */
+	public function prepare($query)
+	{
+		// Make sure we have a query class for this driver.
+		if (!class_exists('JDatabaseStatementPdo'))
+		{
+			// If it doesn't exist we are at an impasse so throw an exception.
+			throw new RuntimeException('Database Statement Class not found.');
+		}
+
+		$this->connect();
+
+		if (!is_object($this->connection))
+		{
+			JLog::add(JText::sprintf('JLIB_DATABASE_QUERY_FAILED', $this->errorNum, $this->errorMsg), JLog::ERROR, 'database');
+			throw new RuntimeException($this->errorMsg, $this->errorNum);
+		}
+
+		return $this->connection->prepare((string) $query)
 	}
 
 	/**

@@ -17,7 +17,7 @@ defined('JPATH_PLATFORM') or die;
  * @see         http://php.net/manual/en/book.mysqli.php
  * @since       12.1
  */
-class JDatabaseDriverMysqli extends JDatabaseDriver
+class JDatabaseDriverMysqli extends JDatabaseDriver implements JDatabaseDriverPrepareable
 {
 	/**
 	 * The name of the database driver.
@@ -536,6 +536,37 @@ class JDatabaseDriverMysqli extends JDatabaseDriver
 		}
 
 		return $this->cursor;
+	}
+
+	/*
+	 * @param   mixed    $query   The SQL statement to set either as a JDatabaseQuery object or a string.
+	 *
+	 * @return  JDatabaseStatementMysqli
+	 *
+	 * @since   12.2
+	 * @throws  RuntimeException
+	 */
+	public function prepare($query)
+	{
+		// Derive the class name from the driver.
+		$class = 'JDatabaseStatement' . ucfirst($this->name);
+
+		// Make sure we have a query class for this driver.
+		if (!class_exists($class))
+		{
+			// If it doesn't exist we are at an impasse so throw an exception.
+			throw new RuntimeException('Database Statement Class not found.');
+		}
+
+		$this->connect();
+
+		if (!is_object($this->connection))
+		{
+			JLog::add(JText::sprintf('JLIB_DATABASE_QUERY_FAILED', $this->errorNum, $this->errorMsg), JLog::ERROR, 'database');
+			throw new RuntimeException($this->errorMsg, $this->errorNum);
+		}
+
+		return new $class($this->connection, (string) $query);
 	}
 
 	/**
