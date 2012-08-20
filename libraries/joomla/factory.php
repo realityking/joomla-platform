@@ -601,6 +601,11 @@ abstract class JFactory
 		$driver = $conf->get('dbtype');
 		$debug = $conf->get('debug');
 
+		if ($driver === 'mysql')
+		{
+			$driver = 'mysqli';
+		}
+
 		$options = array('driver' => $driver, 'host' => $host, 'user' => $user, 'password' => $password, 'database' => $database, 'prefix' => $prefix);
 
 		try
