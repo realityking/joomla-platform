@@ -984,7 +984,7 @@ class JClientFtp
 		$this->_mode($mode);
 
 		// Check to see if the local file exists and if so open it for reading
-		if (@ file_exists($local))
+		if (file_exists($local))
 		{
 			$fp = fopen($local, "rb");
 			if (!$fp)

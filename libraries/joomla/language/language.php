@@ -918,18 +918,17 @@ class JLanguage
 		while ($continue && next($backtrace))
 		{
 			$step = current($backtrace);
-			$class = @ $step['class'];
 
 			// We're looking for something outside of language.php
-			if ($class != 'JLanguage' && $class != 'JText')
+			if (isset($step['class']) && $step['class'] != 'JLanguage' && $step['class'] != 'JText')
 			{
-				$info['function'] = @ $step['function'];
+				$info['function'] = isset($step['function']) ? $step['function'] : '';
 				$info['class'] = $class;
 				$info['step'] = prev($backtrace);
 
 				// Determine the file and name of the file
-				$info['file'] = @ $step['file'];
-				$info['line'] = @ $step['line'];
+				$info['file'] = isset($step['file']) ? $step['file'] : '';
+				$info['line'] = isset($step['line']) ? $step['line'] : '';
 
 				$continue = false;
 			}
