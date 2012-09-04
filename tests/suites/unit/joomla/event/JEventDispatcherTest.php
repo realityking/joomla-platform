@@ -54,14 +54,14 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 	public function testGetInstance()
 	{
 		$mock = JEventDispatcher::getInstance();
-		
+
 		$this->assertInstanceOf(
 			'JEventDispatcherInspector',
 			$mock
 		);
-		
+
 		$this->object->setInstance(null);
-		
+
 		$instance = JEventDispatcher::getInstance();
 
 		$this->assertInstanceOf(
@@ -78,15 +78,15 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 			$this->equalTo('foo'),
 			'Tests that a subsequent call to JEventDispatcher::getInstance returns the cached singleton.'
 		);
-		
+
 		JEventDispatcherInspector::setInstance($mock);
 	}
 
     /**
      * Test JEventDispatcher::getState().
-     * 
+     *
      * @return void
-     * 
+     *
      * @since 11.3
      * @covers   JEventDispatcher::getState
      */
@@ -96,9 +96,9 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     		$this->object->getState(),
     		$this->equalTo(null)
     	);
-    	
+
     	$this->object->_state = 'test';
-    	
+
     	$this->assertThat(
     		$this->object->getState(),
     		$this->equalTo('test')
@@ -107,7 +107,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test JEventDispatcher::register().
-     * 
+     *
      * @since 11.3
      * @covers    JEventDispatcher::register
      */
@@ -118,15 +118,15 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     		$this->object->_observers,
     		$this->equalTo(array())
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(array())
     	);
-    	
+
     	//We register a function on the event 'onTestEvent'
     	$this->object->register('onTestEvent', 'JEventMockFunction');
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo(
@@ -135,17 +135,17 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
     			array('ontestevent' => array(0))
     		)
     	);
-    	
+
     	//We register the same function on a different event 'onTestOtherEvent'
     	$this->object->register('onTestOtherEvent', 'JEventMockFunction');
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo(
@@ -155,7 +155,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -165,10 +165,10 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	//Now we attach a class to the dispatcher
     	$this->object->register('', 'JEventInspector');
-    	
+
     	$object = $this->object->_observers[2];
 
     	$this->assertThat(
@@ -181,7 +181,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -196,7 +196,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Test JEventDispatcher::register() with an error.
-	 * 
+	 *
 	 * @since              12.1
 	 * @expectedException  InvalidArgumentException
 	 * @covers             JEventDispatcher::register
@@ -208,7 +208,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test JEventDispatcher::trigger().
-     * 
+     *
      * @since    11.3
      * @covers   JEventDispatcher::trigger
      */
@@ -216,13 +216,13 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     {
     	$this->object->register('onTestEvent', 'JEventMockFunction');
     	$this->object->register('', 'JEventInspector');
-    	
+
     	//We check a non-existing event
     	$this->assertThat(
     		$this->object->trigger('onFakeEvent'),
     		$this->equalTo(array())
     	);
-    	
+
     	//Lets check the existing event "onTestEvent" without parameters
     	$this->assertThat(
     		$this->object->trigger('onTestEvent'),
@@ -233,7 +233,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	//Lets check the existing event "onTestEvent" with parameters
     	$this->assertThat(
     		$this->object->trigger('onTestEvent', array('one', 'two')),
@@ -244,10 +244,10 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	//We check a situation where the observer is broken. Joomla should handle this gracefully
     	$this->object->_observers = array();
-    	
+
     	$this->assertThat(
     		$this->object->trigger('onTestEvent'),
     		$this->equalTo(array())
@@ -256,7 +256,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test JEventDispatcher::attach().
-     * 
+     *
      * @since 11.3
      * @covers JEventDispatcher::attach
      */
@@ -264,40 +264,40 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     {
     	//Lets test an invalid observer
     	$observer = array();
-    	
+
     	$this->object->attach($observer);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(array())
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo(array())
     	);
-    	
+
     	//Lets test an uncallable observer
     	$observer = array('handler' => 'fakefunction', 'event' => 'onTestEvent');
-    	
+
     	$this->object->attach($observer);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(array())
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo(array())
     	);
-    	
+
     	//Lets test a callable function observer
     	$observer = array('handler' => 'JEventMockFunction', 'event' => 'onTestEvent');
     	$observers = array($observer);
-    	
+
     	$this->object->attach($observer);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -306,7 +306,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo($observers)
@@ -315,9 +315,9 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     	//Lets test that an observer is not attached twice
     	$observer = array('handler' => 'JEventMockFunction', 'event' => 'onTestEvent');
     	$observers = array($observer);
-    	
+
     	$this->object->attach($observer);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -326,7 +326,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo($observers)
@@ -334,9 +334,9 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 
     	//Lets test an invalid object
     	$observer = new stdClass();
-    	
+
     	$this->object->attach($observer);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -345,18 +345,18 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo($observers)
     	);
-    	
+
     	//Lets test a valid event object
     	$observer = new JEventInspector($this->object);
     	$observers[] = $observer;
-    	
+
     	$this->object->attach($observer);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -366,7 +366,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo($observers)
@@ -374,9 +374,9 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 
     	//Lets test that an object observer is not attached twice
     	$observer = new JEventInspector($this->object);
-    	
+
     	$this->object->attach($observer);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -386,7 +386,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     			)
     		)
     	);
-    	
+
     	$this->assertThat(
     		$this->object->_observers,
     		$this->equalTo($observers)
@@ -395,7 +395,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test JEventDispatcher::detach().
-     * 
+     *
      * @since 11.3
      * @covers JEventDispatcher::detach
      */
@@ -407,7 +407,7 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
     	$this->object->attach($observer2);
     	$observer3 = new JEventInspector($this->object);
     	$this->object->attach($observer3);
-    	
+
     	//Test removing a non-existing observer
     	$this->assertThat(
     		$this->object->_methods,
@@ -428,11 +428,11 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 				)
 			)
 		);
-		
+
 		$return = $this->object->detach($observer1);
 
 		$this->assertFalse($return);
-		
+
 		$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -452,12 +452,12 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 				)
 			)
 		);
-		
+
     	//Test removing a functional observer
     	$return = $this->object->detach($observer2);
-    	
+
     	$this->assertTrue($return);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -476,12 +476,12 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 				)
 			)
 		);
-		
+
     	//Test removing an object observer with more than one event
         $return = $this->object->detach($observer3);
-    	
+
     	$this->assertTrue($return);
-    	
+
     	$this->assertThat(
     		$this->object->_methods,
     		$this->equalTo(
@@ -497,4 +497,24 @@ class JEventDispatcherTest extends PHPUnit_Framework_TestCase
 			$this->equalTo(array())
 		);
     }
+
+	/**
+	 * Test JEventDispatcher::addSubscriber().
+	 *
+	 * @since 12.2
+	 * @covers JEventDispatcher::addSubscriber
+	 */
+	public function testAddSubscriber()
+	{
+	}
+
+	/**
+	 * Test JEventDispatcher::removeSubscriber().
+	 *
+	 * @since 12.2
+	 * @covers JEventDispatcher::removeSubscriber
+	 */
+	public function testRemoveSubscriber()
+	{
+	}
 }
