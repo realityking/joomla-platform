@@ -96,4 +96,9 @@ class JLogEntry
 		// Get the date as a JDate object.
 		$this->date = new JDate($date ? $date : 'now');
 	}
+
+	public function __toString()
+	{
+		echo $this->message();
+	}
 }

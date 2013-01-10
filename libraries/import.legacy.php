@@ -55,6 +55,7 @@ if (!class_exists('JLoader'))
 
 // Setup the autoloaders.
 JLoader::setup();
+JLoader::registerNamespace('Psr', JPATH_PLATFORM . '/Psr');
 
 // Register the legacy library base path for deprecated or legacy libraries.
 JLoader::registerPrefix('J', JPATH_PLATFORM . '/legacy');

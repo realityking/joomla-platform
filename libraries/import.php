@@ -46,7 +46,9 @@ if (!class_exists('JLoader'))
 }
 
 // Setup the autoloaders.
-JLoader::setup();
+JLoader::setup(JLoader::NATURAL_CASE, true);
+JLoader::registerNamespace('Psr', JPATH_PLATFORM . '/Psr');
+
 
 // Import the base Joomla Platform libraries.
 JLoader::import('joomla.factory');
